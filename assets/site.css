@@ -1,0 +1,203 @@
+/* Hirsch CPA -- shared site stylesheet (identical to hirsch-homepage-mockup-v4.html) */
+:root{
+  --bg:#FAF6F0; --surface:#FFFFFF; --ink:#382F26; --taupe:#6E6152;
+  --muted:#8F8069; --gold:#B0894F; --gold-d:#8F6D38; --soft:#F1E8D9;
+  --border:#EADFCD; --shadow:0 1px 2px rgba(56,47,38,.04),0 8px 30px rgba(56,47,38,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+a{text-decoration:none;color:inherit}
+
+/* NAV */
+header{position:sticky;top:0;z-index:50;background:rgba(250,246,240,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:74px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand .mark{height:42px;width:auto;display:block}
+.brand .name{font-weight:800;letter-spacing:.14em;font-size:19px;color:var(--ink)}
+.brand .name span{color:var(--gold)}
+.brand .sub{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+.navlinks{display:flex;align-items:center;gap:30px}
+.navlinks a.link{font-weight:500;font-size:15px;color:var(--taupe)}
+.navlinks a.link:hover{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:15px;border-radius:10px;padding:11px 20px;cursor:pointer;border:1px solid transparent;transition:.15s}
+.btn-gold{background:var(--gold);color:#fff}
+.btn-gold:hover{background:var(--gold-d)}
+.btn-ghost{background:transparent;color:var(--taupe);border-color:var(--border)}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold-d)}
+
+/* HERO */
+.hero{padding:96px 0 84px;text-align:center;position:relative}
+.eyebrow{display:inline-block;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-d);background:var(--soft);border:1px solid var(--border);padding:7px 16px;border-radius:999px;margin-bottom:26px}
+.hero h1{font-size:56px;line-height:1.08;font-weight:800;letter-spacing:-.02em;max-width:800px;margin:0 auto 22px}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.hero p{font-size:20px;color:var(--taupe);max-width:600px;margin:0 auto 36px}
+.cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn-lg{padding:15px 30px;font-size:16px;border-radius:12px}
+.trust{display:flex;gap:40px;justify-content:center;flex-wrap:wrap;margin-top:64px;padding-top:38px;border-top:1px solid var(--border)}
+.trust .item{text-align:center}
+.trust .n{font-size:30px;font-weight:800;color:var(--ink)}
+.trust .l{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+
+/* SECTIONS */
+section.block{padding:84px 0}
+.head{text-align:center;max-width:640px;margin:0 auto 52px}
+.head .tag{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-d);font-weight:600}
+.head h2{font-size:38px;font-weight:800;letter-spacing:-.015em;margin:12px 0 14px}
+.head p{font-size:17px;color:var(--taupe)}
+
+/* SERVICES */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:30px;box-shadow:var(--shadow);transition:.18s}
+.card:hover{transform:translateY(-3px);border-color:var(--gold)}
+.card .ic{width:46px;height:46px;border-radius:12px;background:var(--soft);display:flex;align-items:center;justify-content:center;color:var(--gold-d);margin-bottom:18px}
+.card .ic svg{width:24px;height:24px}
+.card h3{font-size:19px;font-weight:700;margin-bottom:8px}
+.card p{font-size:15px;color:var(--taupe);margin-bottom:16px}
+.card .more{font-size:14px;font-weight:600;color:var(--gold-d)}
+
+/* WHY */
+.why{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.why .it .ic{width:40px;height:40px;color:var(--gold);margin-bottom:14px}
+.why .it h4{font-size:17px;font-weight:700;margin-bottom:6px}
+.why .it p{font-size:14.5px;color:var(--taupe)}
+
+/* STEPS */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.step{position:relative;padding:30px;border:1px dashed var(--border);border-radius:16px}
+.step .num{width:38px;height:38px;border-radius:50%;background:var(--gold);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.step h4{font-size:18px;font-weight:700;margin-bottom:6px}
+.step p{font-size:15px;color:var(--taupe)}
+
+/* ABOUT */
+.about{background:var(--soft)}
+.about .wrap{max-width:760px;text-align:center}
+.about h2{font-size:34px;font-weight:800;margin-bottom:18px}
+.about p{font-size:18px;color:var(--taupe);margin-bottom:16px}
+
+/* CONTACT */
+.contact{text-align:center}
+.contact .box{background:var(--surface);border:1px solid var(--border);border-radius:22px;box-shadow:var(--shadow);padding:56px 40px;max-width:760px;margin:0 auto}
+.contact h2{font-size:36px;font-weight:800;margin-bottom:12px}
+.contact p.lead{font-size:18px;color:var(--taupe);margin-bottom:30px}
+.info{display:flex;gap:36px;justify-content:center;flex-wrap:wrap;margin-top:34px;padding-top:28px;border-top:1px solid var(--border)}
+.info .i{text-align:center}
+.info .i .k{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.info .i .v{font-size:15px;font-weight:600;color:var(--ink)}
+.ph{color:var(--gold-d);font-style:italic;font-weight:500}
+
+/* FOOTER */
+footer{background:var(--ink);color:#EDE6DB;padding:52px 0 30px;margin-top:0}
+.foot{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;align-items:flex-start}
+footer .name{font-weight:800;letter-spacing:.14em;font-size:18px}
+footer .name span{color:var(--gold)}
+footer .sub{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#A99C88;margin-top:4px}
+.fcol h5{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#A99C88;margin-bottom:12px}
+.fcol a{display:block;color:#DCD3C6;font-size:14.5px;margin-bottom:9px}
+.fcol a:hover{color:var(--gold)}
+.copy{border-top:1px solid rgba(255,255,255,.1);margin-top:40px;padding-top:22px;font-size:13px;color:#A99C88;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+@media(max-width:860px){
+  .navlinks .link{display:none}
+  .hero h1{font-size:38px}.hero p{font-size:18px}
+  .grid,.why-grid,.steps{grid-template-columns:1fr}
+  .head h2{font-size:30px}
+}
+
+/* ================================================================== */
+/* DEEP SERVICE PAGES -- additive only, not present in the homepage    */
+/* mockup; reuses the same tokens, radii, shadows, and type scale so   */
+/* it reads as the same design system.                                */
+/* ================================================================== */
+.page-hero{padding:56px 0 64px;text-align:center}
+.breadcrumb{font-size:13px;color:var(--muted);margin-bottom:18px}
+.breadcrumb a{color:var(--gold-d);font-weight:600}
+.page-hero h1{font-size:42px;font-weight:800;letter-spacing:-.015em;max-width:760px;margin:0 auto 18px}
+.page-hero p{font-size:18px;color:var(--taupe);max-width:640px;margin:0 auto}
+.detail{padding:0 0 90px}
+.detail-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:40px;align-items:start}
+.detail-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:36px;box-shadow:var(--shadow)}
+.detail-card h3{font-size:20px;font-weight:700;margin-bottom:14px}
+.detail-card + .detail-card{margin-top:24px}
+.detail-list{list-style:none}
+.detail-list li{position:relative;padding-left:26px;margin-bottom:12px;font-size:15.5px;color:var(--taupe)}
+.detail-list li::before{content:"";position:absolute;left:0;top:9px;width:8px;height:8px;border-radius:50%;background:var(--gold)}
+.detail-card p{font-size:15.5px;color:var(--taupe);margin-bottom:12px}
+.detail-card p:last-child{margin-bottom:0}
+.side-cta{background:var(--soft);border:1px solid var(--border);border-radius:18px;padding:32px;text-align:center}
+.side-cta h4{font-size:19px;font-weight:700;margin-bottom:10px}
+.side-cta p{font-size:14.5px;color:var(--taupe);margin-bottom:20px}
+.other-services{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:26px 30px;margin-top:24px}
+.other-services h4{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.other-services .links{display:flex;flex-direction:column;gap:9px}
+.other-services a{font-size:14.5px;font-weight:600;color:var(--gold-d)}
+.other-services a:hover{color:var(--ink)}
+
+@media(max-width:860px){
+  .detail-grid{grid-template-columns:1fr}
+  .page-hero h1{font-size:32px}
+}
+
+/* contact page */
+.contact-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:28px;align-items:start}
+.cform{display:flex;flex-direction:column;gap:16px;margin-top:8px}
+.cform label{display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:600;color:var(--taupe)}
+.cform input,.cform textarea{font-family:inherit;font-size:15px;color:var(--ink);background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;outline:none}
+.cform input:focus,.cform textarea:focus{border-color:var(--gold)}
+.cform button{align-self:flex-start;margin-top:4px;cursor:pointer}
+.cnote{font-size:14px;color:var(--gold-d);min-height:18px;margin:0}
+.info-stack{flex-direction:column!important;gap:16px;align-items:flex-start;margin-top:12px;border:none!important;padding:0!important}
+@media(max-width:860px){.contact-grid{grid-template-columns:1fr}}
+
+/* ---- mobile compatibility (phones) ---- */
+html,body{max-width:100%;overflow-x:hidden}
+img,svg{max-width:100%}
+@media(max-width:860px){
+  .wrap{padding:0 18px}
+  .nav{height:62px}
+  .brand{gap:9px}
+  .brand .mark{height:32px}
+  .brand .name{font-size:15px;letter-spacing:.08em}
+  .brand .sub{font-size:8px;letter-spacing:.1em}
+  .navlinks{gap:10px}
+  .navlinks .link{display:none}
+  .navlinks .btn-ghost{display:none}      /* hide Client Login button on phones */
+  .btn{padding:9px 15px;font-size:14px}
+
+  .hero{padding:46px 0 44px}
+  .hero h1{font-size:29px;line-height:1.14}
+  .hero p{font-size:16px;margin-bottom:28px}
+  .cta-row{gap:10px}
+  .btn-lg{padding:13px 20px;font-size:15px}
+  .trust{gap:20px;margin-top:38px;padding-top:26px}
+  .trust .n{font-size:21px}
+  .trust .l{font-size:12px}
+
+  section.block{padding:50px 0}
+  .head{margin:0 auto 32px}
+  .head h2{font-size:25px}
+  .head p{font-size:15.5px}
+  .grid,.why-grid,.steps{grid-template-columns:1fr;gap:16px}
+  .card{padding:24px}
+
+  .about h2{font-size:25px}
+  .about p{font-size:16px}
+
+  .contact .box{padding:34px 20px}
+  .contact h2{font-size:26px}
+  .contact p.lead{font-size:16px}
+  .info{gap:20px}
+
+  .page-hero{padding:38px 0 42px}
+  .page-hero h1{font-size:27px}
+  .page-hero p{font-size:16px}
+  .detail{padding:0 0 60px}
+  .detail-grid,.contact-grid{grid-template-columns:1fr;gap:22px}
+  .detail-card{padding:24px}
+  .side-cta{padding:26px}
+
+  .foot{gap:26px}
+  .copy{flex-direction:column;gap:6px}
+}
