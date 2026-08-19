@@ -135,3 +135,21 @@ footer .sb{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#A
  .detail{padding:44px 0 56px}.dgrid,.cwrap{grid-template-columns:1fr;gap:28px}.side{position:static}.sec h3{font-size:21px}
  .foot{gap:26px}.copy{flex-direction:column;gap:6px}
 }
+
+/* mobile header + hamburger (mobile only) */
+.burger{display:none;background:none;border:none;cursor:pointer;padding:6px;color:var(--ink)}
+.burger svg{width:27px;height:27px;display:block}
+.mmenu{display:none;position:fixed;top:64px;left:0;right:0;background:var(--surface);border-bottom:1px solid var(--border);box-shadow:0 14px 30px rgba(56,47,38,.14);z-index:49;padding:12px 24px 22px}
+.mmenu.open{display:block}
+.mmenu .mh{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:8px 0 4px}
+.mmenu a{display:block;padding:13px 4px;font-size:16px;font-weight:600;color:var(--ink);border-bottom:1px solid var(--border)}
+.mmenu a:last-child{border-bottom:none}
+@media(max-width:900px){
+ .burger{display:inline-flex;align-items:center}
+ .nav{justify-content:flex-start;gap:10px}
+ .nl{margin-left:auto;gap:8px}
+ .nl .bookdesk{display:none}
+ .brand .sb{display:none}
+ .login{padding:9px 16px;font-size:14px}
+ .clw{display:none}
+}

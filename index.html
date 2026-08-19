@@ -14,10 +14,12 @@
 <body>
 
 <header><div class="wrap nav">
+<button class="burger" aria-label="Services menu" onclick="toggleMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
 <a href="index.html#top" class="brand"><img src="assets/logo-emblem.png" alt="Hirsch CPA"><div><div class="nm">HIRSCH <span>CPA</span></div><div class="sb">Certified Public Accountants</div></div></a>
 <nav class="nl"><a class="l" href="index.html#services">Services</a><a class="l" href="index.html#about">About</a><a class="l" href="contact.html">Contact</a>
-<a class="btn login" href="#"><span class="dot"></span>Client Login</a><a class="btn gold" href="contact.html">Book a call</a></nav>
+<a class="btn login" href="#"><span class="dot"></span><span class="clw">Client </span>Login</a><a class="btn gold bookdesk" href="contact.html">Book a call</a></nav>
 </div></header>
+<div class="mmenu" id="mmenu"><div class="mh">Services</div><a href="services/tax-preparation.html">Tax Preparation</a><a href="services/bookkeeping.html">Bookkeeping</a><a href="services/payroll.html">Payroll</a><a href="services/sales-tax.html">Sales Tax</a><a href="services/audit.html">Audit</a><a href="services/advisory.html">Advisory</a></div>
 <a id="top"></a>
 <section class="hero"><div class="wrap hrow">
  <div>
@@ -98,4 +100,5 @@
  <div class="fcol"><h5>Get in touch</h5><a href="mailto:info@hirsch.cpa">info@hirsch.cpa</a><a href="tel:+13474862780">(347) 486-2780</a><a href="contact.html">Book a call</a></div>
 </div><div class="copy"><span>© 2026 Hirsch &amp; Co. Accounting LLC. All rights reserved.</span><span>Privacy · Terms</span></div>
 </div></footer>
+<script>function toggleMenu(){document.getElementById("mmenu").classList.toggle("open");}document.querySelectorAll("#mmenu a").forEach(function(a){a.addEventListener("click",function(){document.getElementById("mmenu").classList.remove("open");});});</script>
 </body></html>
