@@ -159,3 +159,50 @@ footer .sb{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#A
  .brand .bt .l1,.brand .bt .l2{font-size:16px}
  .mbackdrop.open{display:block;position:fixed;inset:64px 0 0 0;background:rgba(40,33,23,.4);z-index:48}
 }
+
+/* resources dropdown (desktop) */
+.drop{position:relative;display:inline-flex;align-items:center}
+.drop .dtog{display:inline-flex;align-items:center;gap:5px;cursor:pointer}
+.drop .cv{font-size:10px;color:var(--muted);transition:transform .15s}
+.drop:hover .cv{transform:rotate(180deg)}
+.dmenu{position:absolute;top:100%;left:0;margin-top:10px;background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 14px 30px rgba(56,47,38,.14);padding:8px;min-width:200px;display:none;z-index:60}
+.drop:hover .dmenu{display:block}
+.dmenu::before{content:"";position:absolute;top:-10px;left:0;right:0;height:10px}
+.dmenu a{display:block;padding:10px 12px;border-radius:8px;font-size:14px;font-weight:600;color:var(--ink);white-space:nowrap}
+.dmenu a:hover{background:var(--tint)}
+/* track-refund + due-dates page styles */
+.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.rcard{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:26px}
+.rcard h3{font-size:20px;margin:0 0 6px}
+.rcard p{color:var(--muted);font-size:15px;margin:0 0 16px;line-height:1.55}
+.rcard .need{font-size:13px;color:var(--muted);margin-top:14px}
+select.state{width:100%;padding:14px 16px;border:1px solid var(--border);border-radius:12px;font-size:16px;font-family:inherit;background:#fff;color:var(--ink);cursor:pointer}
+.ddtable{width:100%;border-collapse:collapse;margin:0}
+.ddwrap{background:#fff;border:1px solid var(--border);border-radius:16px;padding:6px 22px;margin-bottom:20px}
+.ddwrap h3{font-size:18px;margin:16px 4px 2px}
+.ddtable th{text-align:left;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:700;padding:12px 12px;border-bottom:2px solid var(--border)}
+.ddtable td{padding:13px 12px;border-bottom:1px solid var(--border);vertical-align:top;color:var(--ink);font-size:15px}
+.ddtable td.n{font-weight:600}
+.ddtable td.d{white-space:nowrap;font-weight:600}
+.ddtable tr:last-child td{border-bottom:none}
+.note{background:var(--tint);border-radius:14px;padding:16px 18px;font-size:14px;color:var(--ink);line-height:1.55;margin-top:6px}
+@media(max-width:820px){.rgrid{grid-template-columns:1fr}}
+@media(max-width:640px){
+ .ddwrap{padding:4px 16px}
+ .ddtable thead{display:none}
+ .ddtable,.ddtable tbody,.ddtable tr,.ddtable td{display:block}
+ .ddtable tr{padding:14px 0;border-bottom:1px solid var(--border)}
+ .ddtable tr:last-child{border-bottom:none}
+ .ddtable td{border:none;padding:3px 0}
+ .ddtable td.n{font-weight:700;font-size:16px}
+ .ddtable td.d::before{content:attr(data-l) ": ";color:var(--muted);font-weight:600}
+}
+
+/* mobile menu accordion */
+.mmenu .macc{display:flex;align-items:center;justify-content:space-between;width:100%;background:none;border:none;border-bottom:1px solid var(--border);padding:15px 4px;font-size:16px;font-weight:700;color:var(--ink);cursor:pointer;font-family:inherit;text-align:left}
+.mmenu .macc .av{font-size:12px;color:var(--muted);transition:transform .18s}
+.mmenu .macc.open .av{transform:rotate(180deg)}
+.mmenu .msub{display:none;padding:2px 0 6px 12px}
+.mmenu .msub.open{display:block}
+.mmenu .msub a{display:block;padding:12px 4px;font-size:15px;font-weight:600;color:var(--taupe);border-bottom:1px solid var(--border)}
+.mmenu .msub a:last-child{border-bottom:none}
