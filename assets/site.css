@@ -136,20 +136,26 @@ footer .sb{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#A
  .foot{gap:26px}.copy{flex-direction:column;gap:6px}
 }
 
-/* mobile header + hamburger (mobile only) */
-.burger{display:none;background:none;border:none;cursor:pointer;padding:6px;color:var(--ink)}
-.burger svg{width:27px;height:27px;display:block}
-.mmenu{display:none;position:fixed;top:64px;left:0;right:0;background:var(--surface);border-bottom:1px solid var(--border);box-shadow:0 14px 30px rgba(56,47,38,.14);z-index:49;padding:12px 24px 22px}
+/* stacked logo + mobile header + menu */
+.brand .bt{display:flex;flex-direction:column;line-height:1.0}
+.brand .bt .l1{font-weight:800;letter-spacing:.14em;font-size:19px;color:var(--ink)}
+.brand .bt .l2{font-weight:800;letter-spacing:.24em;font-size:19px;color:var(--gold);margin-top:1px}
+.burger{display:none;align-items:center;justify-content:center;width:44px;height:44px;border-radius:12px;border:1px solid var(--border);background:#fff;box-shadow:0 1px 2px rgba(56,47,38,.06);color:var(--ink);cursor:pointer}
+.burger svg{width:22px;height:22px;display:block}
+.mmenu{display:none;position:fixed;top:64px;left:0;right:0;background:var(--surface);border-bottom:1px solid var(--border);box-shadow:0 14px 30px rgba(56,47,38,.14);z-index:49;padding:12px 24px 22px;border-radius:0 0 18px 18px;max-height:calc(100vh - 64px);overflow:auto}
 .mmenu.open{display:block}
 .mmenu .mh{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:8px 0 4px}
 .mmenu a{display:block;padding:13px 4px;font-size:16px;font-weight:600;color:var(--ink);border-bottom:1px solid var(--border)}
 .mmenu a:last-child{border-bottom:none}
+.mmenu .mlogin{display:flex;align-items:center;justify-content:center;gap:9px;background:var(--ink);color:#fff;border-radius:12px;padding:15px;font-weight:700;font-size:16px;border-bottom:none;margin:6px 0 8px}
+.mmenu .mlogin .dot{width:7px;height:7px;border-radius:50%;background:#7ED09B}
+.mmenu .mbook{text-align:center;background:var(--gold);color:#fff;border-radius:12px;padding:15px;font-weight:700;border-bottom:none;margin-top:18px}
+.mbackdrop{display:none}
 @media(max-width:900px){
- .burger{display:inline-flex;align-items:center}
- .nav{justify-content:flex-start;gap:10px}
- .nl{margin-left:auto;gap:8px}
- .nl .bookdesk{display:none}
- .brand .sb{display:none}
- .login{padding:9px 16px;font-size:14px}
- .clw{display:none}
+ .burger{display:inline-flex}
+ .nav{justify-content:space-between;gap:0}
+ .nl{display:none}
+ .brand img{height:36px}
+ .brand .bt .l1,.brand .bt .l2{font-size:16px}
+ .mbackdrop.open{display:block;position:fixed;inset:64px 0 0 0;background:rgba(40,33,23,.4);z-index:48}
 }
