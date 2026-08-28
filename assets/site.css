@@ -80,12 +80,21 @@ footer{background:#231F1A;color:#B8AC98;padding:56px 0 26px;font-size:14px}
 .fcol a{display:block;color:#B8AC98;padding:5px 0;transition:color .12s}.fcol a:hover{color:#fff}
 .copy{border-top:1px solid #3A342C;margin-top:40px;padding-top:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:12.5px;color:#8B8271}
 /* reveal animation */
-.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .4s ease,transform .4s ease}
 .reveal.in{opacity:1;transform:none}
-.grid .card:nth-child(2),.trio .col:nth-child(2),.steps .step:nth-child(2){transition-delay:.08s}
-.grid .card:nth-child(3),.trio .col:nth-child(3),.steps .step:nth-child(3){transition-delay:.16s}
-.grid .card:nth-child(4){transition-delay:.10s}.grid .card:nth-child(5){transition-delay:.18s}.grid .card:nth-child(6){transition-delay:.26s}
-@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.photo img,.brand img{transition:none}}
+.trio .col:nth-child(2),.steps .step:nth-child(2){transition-delay:.08s}
+.trio .col:nth-child(3),.steps .step:nth-child(3){transition-delay:.16s}
+.grid .card:nth-child(2){transition-delay:.08s}.grid .card:nth-child(3){transition-delay:.16s}
+.grid .card:nth-child(4){transition-delay:.24s}.grid .card:nth-child(5){transition-delay:.32s}.grid .card:nth-child(6){transition-delay:.40s}
+/* heading blocks: the heading lands a beat before the words beneath it.
+   The wrapper stops animating itself; its children animate in order instead.
+   Resting appearance is unchanged — only the order of arrival differs. */
+.head.reveal,.phero .wrap.reveal,.shero .wrap.reveal{opacity:1;transform:none;transition:none}
+.head.reveal>*,.phero .wrap.reveal>*,.shero .wrap.reveal .inner>*{opacity:0;transform:translateY(14px);transition:opacity .4s ease,transform .4s ease}
+.head.reveal.in>*,.phero .wrap.reveal.in>*,.shero .wrap.reveal.in .inner>*{opacity:1;transform:none}
+.head.reveal>*:nth-child(2),.phero .wrap.reveal>*:nth-child(2),.shero .wrap.reveal .inner>*:nth-child(2){transition-delay:.09s}
+.head.reveal>*:nth-child(3),.phero .wrap.reveal>*:nth-child(3),.shero .wrap.reveal .inner>*:nth-child(3){transition-delay:.18s}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.head.reveal>*,.phero .wrap.reveal>*,.shero .wrap.reveal .inner>*{opacity:1;transform:none;transition:none}.photo img,.brand img{transition:none}}
 .mbackdrop{display:none}.mmenu{display:none}
 .mmenu .mlogin{display:flex;align-items:center;justify-content:center;gap:9px;background:var(--ink);color:#fff;border-radius:10px;padding:14px;font-weight:600;margin:4px 0 8px}
 .mmenu .mlogin .dot{width:7px;height:7px;border-radius:50%;background:#7ED09B}

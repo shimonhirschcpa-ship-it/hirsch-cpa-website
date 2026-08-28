@@ -78,5 +78,5 @@
 </div><div class="copy"><span>© 2026 Hirsch &amp; Co. Accounting LLC. All rights reserved.</span><span><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></span></div></div></footer><script>function accToggle(b){var s=b.nextElementSibling;b.classList.toggle("open");if(s)s.classList.toggle("open");}
 function toggleMenu(){var m=document.getElementById("mmenu"),b=document.getElementById("mbackdrop");var o=m.classList.toggle("open");if(b)b.classList.toggle("open",o);document.body.style.overflow=o?"hidden":"";}
 document.querySelectorAll("#mmenu a").forEach(function(a){a.addEventListener("click",function(){var m=document.getElementById("mmenu"),b=document.getElementById("mbackdrop");m.classList.remove("open");if(b)b.classList.remove("open");document.body.style.overflow="";});});
-var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}})},{threshold:.1});
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}})},{threshold:0,rootMargin:"0px 0px 12% 0px"});
 document.querySelectorAll(".reveal").forEach(function(el){io.observe(el);});</script></body></html>
