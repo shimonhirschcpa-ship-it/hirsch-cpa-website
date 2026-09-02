@@ -50,11 +50,14 @@ header{position:sticky;top:0;z-index:50;background:rgba(251,248,242,.9);backdrop
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:30px 26px;transition:transform .18s,border-color .18s,box-shadow .18s}
 .card:hover{border-color:var(--gold);transform:translateY(-4px);box-shadow:0 16px 34px rgba(43,38,32,.09)}
-.card .ci{width:44px;height:44px;border-radius:50%;border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;color:var(--gold-d);margin-bottom:18px;transition:background .18s,color .18s}
-.card:hover .ci{background:var(--gold);color:#fff}
+.card .ci{width:44px;height:44px;border-radius:50%;border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;color:var(--gold-d);margin-bottom:18px;transition:background .18s,color .18s,transform .25s ease}
+.card:hover .ci{background:var(--gold);color:#fff;transform:translateY(-3px) scale(1.06)}
 .card .ci svg{width:22px;height:22px}
 .card h3{font-size:21px;margin-bottom:9px}.card p{font-size:15px;color:var(--body);margin-bottom:14px}
 .more{font-size:14px;font-weight:700;color:var(--gold-d);font-family:'Inter'}
+/* the arrow slides on hover; at rest it sits exactly where it always did */
+.more .arw{display:inline-block;transition:transform .2s ease}
+.card:hover .more .arw{transform:translateX(4px)}
 .trio{display:grid;grid-template-columns:repeat(3,1fr);gap:44px;max-width:960px;margin:0 auto}
 .trio .ti{width:34px;height:34px;color:var(--gold-d);margin-bottom:16px}
 .trio h4{font-size:20px;margin-bottom:8px}.trio p{font-size:15px;color:var(--body)}
@@ -79,9 +82,13 @@ footer{background:#231F1A;color:#B8AC98;padding:56px 0 26px;font-size:14px}
 .fcol h5{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#fff;margin-bottom:14px}
 .fcol a{display:block;color:#B8AC98;padding:5px 0;transition:color .12s}.fcol a:hover{color:#fff}
 .copy{border-top:1px solid #3A342C;margin-top:40px;padding-top:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:12.5px;color:#8B8271}
-/* reveal animation */
-.reveal{opacity:0;transform:translateY(14px);transition:opacity .4s ease,transform .4s ease}
-.reveal.in{opacity:1;transform:none}
+/* reveal animation
+   Content is VISIBLE by default. The small script in each page's <head> adds
+   .js-motion to <html> before the page paints, and only then does anything hide
+   itself to be animated in. If that script cannot run, the page renders complete
+   and static instead of blank. */
+html.js-motion .reveal{opacity:0;transform:translateY(14px);transition:opacity .4s ease,transform .4s ease}
+html.js-motion .reveal.in{opacity:1;transform:none}
 .trio .col:nth-child(2),.steps .step:nth-child(2){transition-delay:.08s}
 .trio .col:nth-child(3),.steps .step:nth-child(3){transition-delay:.16s}
 .grid .card:nth-child(2){transition-delay:.08s}.grid .card:nth-child(3){transition-delay:.16s}
@@ -89,12 +96,12 @@ footer{background:#231F1A;color:#B8AC98;padding:56px 0 26px;font-size:14px}
 /* heading blocks: the heading lands a beat before the words beneath it.
    The wrapper stops animating itself; its children animate in order instead.
    Resting appearance is unchanged — only the order of arrival differs. */
-.head.reveal,.phero .wrap.reveal,.shero .wrap.reveal{opacity:1;transform:none;transition:none}
-.head.reveal>*,.phero .wrap.reveal>*,.shero .wrap.reveal .inner>*{opacity:0;transform:translateY(14px);transition:opacity .4s ease,transform .4s ease}
-.head.reveal.in>*,.phero .wrap.reveal.in>*,.shero .wrap.reveal.in .inner>*{opacity:1;transform:none}
+html.js-motion .head.reveal,html.js-motion .phero .wrap.reveal,html.js-motion .shero .wrap.reveal{opacity:1;transform:none;transition:none}
+html.js-motion .head.reveal>*,html.js-motion .phero .wrap.reveal>*,html.js-motion .shero .wrap.reveal .inner>*{opacity:0;transform:translateY(14px);transition:opacity .4s ease,transform .4s ease}
+html.js-motion .head.reveal.in>*,html.js-motion .phero .wrap.reveal.in>*,html.js-motion .shero .wrap.reveal.in .inner>*{opacity:1;transform:none}
 .head.reveal>*:nth-child(2),.phero .wrap.reveal>*:nth-child(2),.shero .wrap.reveal .inner>*:nth-child(2){transition-delay:.09s}
 .head.reveal>*:nth-child(3),.phero .wrap.reveal>*:nth-child(3),.shero .wrap.reveal .inner>*:nth-child(3){transition-delay:.18s}
-@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.head.reveal>*,.phero .wrap.reveal>*,.shero .wrap.reveal .inner>*{opacity:1;transform:none;transition:none}.photo img,.brand img{transition:none}}
+@media(prefers-reduced-motion:reduce){html.js-motion .reveal{opacity:1;transform:none;transition:none}html.js-motion .head.reveal>*,html.js-motion .phero .wrap.reveal>*,html.js-motion .shero .wrap.reveal .inner>*{opacity:1;transform:none;transition:none}.photo img,.brand img{transition:none}}
 .mbackdrop{display:none}.mmenu{display:none}
 .mmenu .mlogin{display:flex;align-items:center;justify-content:center;gap:9px;background:var(--ink);color:#fff;border-radius:10px;padding:14px;font-weight:600;margin:4px 0 8px}
 .mmenu .mlogin .dot{width:7px;height:7px;border-radius:50%;background:#7ED09B}
@@ -232,3 +239,9 @@ select.state:focus{outline:none;border-color:var(--gold)}
 .legal a{color:var(--gold-d);font-weight:600}
 
 .copy a{color:#B8AC98}.copy a:hover{color:#fff}
+
+/* page not found */
+.nf{max-width:680px;margin:0 auto;text-align:center}
+.nf .cta{justify-content:center;margin-top:6px}
+.nf .links{margin-top:34px;padding-top:26px;border-top:1px solid var(--line);font-size:15px;color:var(--body)}
+.nf .links a{color:var(--gold-d);font-weight:600}
