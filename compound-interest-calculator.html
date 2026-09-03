@@ -1,0 +1,480 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compound Interest Calculator u{00B7} Hirsch CPA</title><meta name="description" content="Work out what your savings could grow to over time, with regular contributions."><link rel="icon" href="assets/logo-emblem.png">
+<!-- Social share / link preview (Open Graph + Twitter Card) -->
+<link rel="canonical" href="https://hirsch-cpa-website.vercel.app/compound-interest-calculator.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Hirsch &amp; Co. Accounting LLC">
+<meta property="og:title" content="Compound Interest Calculator u{2022} Hirsch CPA">
+<meta property="og:description" content="Work out what your savings could grow to over time, with regular contributions.">
+<meta property="og:url" content="https://hirsch-cpa-website.vercel.app/compound-interest-calculator.html">
+<meta property="og:image" content="https://hirsch-cpa-website.vercel.app/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Hirsch &amp; Co. Accounting LLC • Certified Public Accountants">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Compound Interest Calculator u{2022} Hirsch CPA">
+<meta name="twitter:description" content="Work out what your savings could grow to over time, with regular contributions.">
+<meta name="twitter:image" content="https://hirsch-cpa-website.vercel.app/assets/og-image.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+/* ===== calculator ===== */
+.calc{display:grid;grid-template-columns:.8fr 1.2fr;gap:40px;align-items:start;max-width:1000px;margin:0 auto}
+/* grid children default to min-width:auto, which lets the wide table push the whole
+   page sideways instead of scrolling inside its own box. This stops that. */
+.calc>*{min-width:0}
+.cpanel{background:var(--cream);border:1px solid var(--line);border-radius:16px;padding:26px}
+.fld{margin-bottom:18px}
+.fld label,.fld .lb{display:block;font-size:14.5px;font-weight:600;color:var(--ink);margin-bottom:7px}
+/* label plus a small question mark that explains the field */
+.lrow{display:flex;align-items:center;gap:7px;margin-bottom:7px}
+.lrow label{margin-bottom:0}
+.qm{position:relative;width:17px;height:17px;flex:none;padding:0;border:1.2px solid var(--muted);border-radius:50%;background:none;color:var(--muted);font-family:inherit;font-size:11px;font-weight:700;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:color .15s,border-color .15s}
+.qm:hover,.qm[aria-expanded="true"]{border-color:var(--gold-d);color:var(--gold-d)}
+.qm:focus-visible{outline:2px solid var(--gold-d);outline-offset:2px}
+/* the dot stays small but the tappable area is finger sized */
+.qm::before{content:"";position:absolute;left:-9px;right:-9px;top:-9px;bottom:-9px}
+.sr{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+#qtip{position:absolute;z-index:20;max-width:250px;background:var(--ink);color:#fff;border-radius:9px;padding:10px 13px;font-size:13px;line-height:1.5;box-shadow:0 10px 26px rgba(0,0,0,.25);opacity:0;visibility:hidden;transition:opacity .12s;pointer-events:none}
+#qtip.on{opacity:1;visibility:visible}
+.inp{position:relative;display:flex;align-items:center}
+.inp .pre,.inp .suf{position:absolute;font-size:16px;font-weight:600;color:var(--muted);pointer-events:none}
+.inp .pre{left:14px}.inp .suf{right:14px}
+.inp input{width:100%;padding:14px 15px;border:1px solid var(--line);border-radius:9px;font-family:inherit;font-size:17px;font-weight:600;background:#fff;color:var(--ink);-moz-appearance:textfield}
+.inp input::-webkit-outer-spin-button,.inp input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.inp.money input{padding-left:29px}
+.inp.pct input{padding-right:33px}
+.inp input:focus{outline:2px solid var(--gold-d);outline-offset:1px;border-color:var(--gold-d)}
+/* contribution frequency: plain radio buttons, small and quiet */
+.freq{display:flex;gap:22px;align-items:center;flex-wrap:wrap;margin-top:11px}
+.freq label{display:inline-flex;align-items:center;gap:8px;margin:0;font-size:13.5px;font-weight:500;color:var(--body);cursor:pointer;line-height:1.4;padding:8px 0}
+.freq input{appearance:none;-webkit-appearance:none;position:relative;width:15px;height:15px;margin:0;flex:none;border:1.5px solid var(--muted);border-radius:50%;background:#fff;cursor:pointer}
+.freq input:checked{border-color:var(--gold-d)}
+.freq input:checked::after{content:"";position:absolute;left:50%;top:50%;width:7px;height:7px;margin:-3.5px 0 0 -3.5px;border-radius:50%;background:var(--gold-d)}
+.freq input:focus-visible{outline:2px solid var(--gold-d);outline-offset:2px}
+.freq label:hover{color:var(--ink)}
+.gobtn{width:100%;justify-content:center;margin-top:6px;font-size:16px;padding:15px 24px;min-height:50px}
+
+.res{background:#fff;border:1px solid var(--line);border-radius:16px;padding:26px}
+
+/* one figure, no box: a small gold line above a large serif number */
+.hlead{font-size:14.5px;color:var(--gold-d);font-weight:500;margin-bottom:4px}
+.hbig{font-family:'Fraunces',Georgia,serif;font-size:58px;font-weight:600;color:var(--ink);line-height:1.02;letter-spacing:-.02em;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* view switch: icon only, top right of the chart area, divider between them */
+/* title centred across the full width, toggle pinned right */
+.vhead{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;margin:26px 0 12px}
+.vtitle{grid-column:2;text-align:center;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-d);font-weight:700}
+.vtabs{grid-column:3;justify-self:end}
+.vtabs{display:flex;align-items:center;flex:none}
+.vtabs button{background:none;border:0;padding:0 14px;margin:0;cursor:pointer;color:var(--gold-d);display:flex;align-items:center;justify-content:center;min-height:44px;transition:color .15s}
+.vtabs button+button{border-left:1px solid var(--line)}
+.vtabs button:hover{color:var(--ink)}
+.vtabs button[aria-pressed="true"]{color:var(--ink)}
+.vtabs button:focus-visible{outline:2px solid var(--gold-d);outline-offset:2px;border-radius:6px}
+.vtabs svg{width:21px;height:21px;display:block}
+
+.chartwrap{position:relative}
+/* the chart is drawn at the real pixel width of its box, so it always fits
+   and never scrolls sideways. Bars compress as the screen narrows. */
+.chartbox{width:100%}
+.chartbox svg{display:block;width:100%;height:auto}
+/* the chart responds to pointing but nothing on it is clickable, so it keeps the
+   normal arrow. A hand would promise a click that does nothing. */
+.chartbox rect.plot{cursor:default}
+.chartbox rect.seg{transition:opacity .13s ease}
+#tip{position:absolute;pointer-events:none;opacity:0;transition:opacity .12s;background:var(--ink);color:#fff;border-radius:9px;padding:10px 13px;font-size:13px;line-height:1.5;box-shadow:0 10px 26px rgba(0,0,0,.25);z-index:5;white-space:nowrap}
+#tip .ty{font-weight:700;font-size:13.5px;margin-bottom:5px;color:#fff}
+#tip .tr{display:flex;justify-content:space-between;gap:16px;color:#D8CDBC}
+#tip .tr b{color:#fff;font-variant-numeric:tabular-nums}
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px}
+.legend div{display:flex;align-items:center;gap:7px;font-size:13.5px;color:var(--body)}
+.legend i{width:12px;height:12px;border-radius:3px;flex:none}
+
+.tablebox{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table.yr{border-collapse:collapse;width:100%;min-width:720px;font-size:13.5px}
+table.yr th{background:var(--cream);text-align:right;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-d);font-weight:700;padding:12px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+table.yr th:first-child,table.yr td:first-child{text-align:left}
+table.yr td{padding:11px 14px;border-bottom:1px solid var(--line);text-align:right;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+table.yr tr:last-child td{border-bottom:none}
+table.yr tbody tr:nth-child(even){background:#FCFAF6}
+table.yr td.tot{font-weight:700}
+.disc{background:var(--cream);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:12px;padding:16px 18px;font-size:13.5px;line-height:1.65;color:var(--ink);max-width:1000px;margin:30px auto 0}
+/* below this the panel is too narrow to centre the title with the toggle beside it,
+   so the title takes its own line and the toggle sits right underneath */
+@media(max-width:520px){.vhead{grid-template-columns:1fr;gap:6px}.vtitle{grid-column:1}.vtabs{grid-column:1;justify-self:end}}
+@media(max-width:860px){.calc{grid-template-columns:1fr;gap:24px}.res,.cpanel{padding:20px}
+ .hbig{font-size:42px}}
+</style><script>document.documentElement.className+=" js-motion";</script></head><body><header><div class="wrap nav">
+<a href="index.html#top" class="brand"><img src="assets/logo-emblem.png" alt="Hirsch CPA"><div class="bt"><div class="nmrow"><span class="h">HIRSCH</span> <span class="c">CPA</span></div><div class="subttl">Certified Public Accountants</div></div></a>
+<nav class="nl">
+ <div class="drop"><a class="l" href="index.html#services">Services <span class="cv">&#9662;</span></a><div class="dmenu"><a href="services/tax-preparation.html">Tax Preparation</a><a href="services/bookkeeping.html">Bookkeeping</a><a href="services/payroll.html">Payroll</a><a href="services/sales-tax.html">Sales Tax</a><a href="services/audit.html">Audit</a><a href="services/advisory.html">Advisory</a></div></div>
+ <div class="drop"><a class="l" href="track-refund.html">Resources <span class="cv">&#9662;</span></a><div class="dmenu"><a href="track-refund.html">Track Your Refund</a><a href="tax-due-dates.html">Due Dates</a><a href="calculators.html">Financial Calculators</a><a href="calculators.html">Financial Calculators</a></div></div>
+ <a class="l" href="index.html#about">About</a><a class="l" href="contact.html">Contact</a>
+ <a class="btn login" href="https://hirsch-portal.vercel.app" target="_blank" rel="noopener"><span class="dot"></span><span class="clw">Client </span>Login</a><a class="btn gold" href="contact.html">Book a call</a></nav>
+<button class="burger" aria-label="Menu" onclick="toggleMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+</div></header>
+<div class="mbackdrop" id="mbackdrop" onclick="toggleMenu()"></div><div class="mmenu" id="mmenu">
+<a class="mlogin" href="https://hirsch-portal.vercel.app" target="_blank" rel="noopener"><span class="dot"></span>Client Login</a>
+<button class="macc" onclick="accToggle(this)">Services <span class="av">&#9662;</span></button><div class="msub"><a href="services/tax-preparation.html">Tax Preparation</a><a href="services/bookkeeping.html">Bookkeeping</a><a href="services/payroll.html">Payroll</a><a href="services/sales-tax.html">Sales Tax</a><a href="services/audit.html">Audit</a><a href="services/advisory.html">Advisory</a></div>
+<button class="macc" onclick="accToggle(this)">Resources <span class="av">&#9662;</span></button><div class="msub"><a href="track-refund.html">Track Your Refund</a><a href="tax-due-dates.html">Due Dates</a><a href="calculators.html">Financial Calculators</a><a href="calculators.html">Financial Calculators</a></div>
+<a class="mbook" href="contact.html">Book a call</a></div>
+<section class="phero"><img class="wm" src="assets/logo-emblem.png" alt=""><div class="wrap"><h1>Compound Interest Calculator</h1><p>Fill in your figures, then press Calculate.</p></div></section>
+
+<section class="detail"><div class="wrap">
+<div class="calc">
+
+ <form class="cpanel" id="f" novalidate style="position:relative">
+  <div class="fld">
+   <div class="lrow"><label for="p0">Initial Amount</label><button type="button" class="qm" aria-label="Explain Initial Amount" aria-expanded="false" aria-describedby="q-p0">?</button><span id="q-p0" class="sr">The money you are starting with today. If you are starting from nothing, put 0.</span></div>
+   <div class="inp money"><span class="pre">$</span><input id="p0" type="text" inputmode="decimal" autocomplete="off" value="5,000"></div>
+  </div>
+  <div class="fld">
+   <div class="lrow"><label for="pmt">Contributions</label><button type="button" class="qm" aria-label="Explain Contributions" aria-expanded="false" aria-describedby="q-pmt">?</button><span id="q-pmt" class="sr">How much you plan to add each time. Use the choice below to say whether you add it every month or once a year.</span></div>
+   <div class="inp money"><span class="pre">$</span><input id="pmt" type="text" inputmode="decimal" autocomplete="off" value="150"></div>
+   <div class="freq" role="radiogroup" aria-label="How often you will add it">
+    <label><input type="radio" name="freq" value="12" checked>Every month</label>
+    <label><input type="radio" name="freq" value="1">Once a year</label>
+   </div>
+  </div>
+  <div class="fld">
+   <div class="lrow"><label for="rate">Rate of return</label><button type="button" class="qm" aria-label="Explain Rate of return" aria-expanded="false" aria-describedby="q-rate">?</button><span id="q-rate" class="sr">The percentage you expect your money to grow by each year. If you are not sure, a lower guess is safer than a hopeful one.</span></div>
+   <div class="inp pct"><input id="rate" type="number" inputmode="decimal" min="0" max="100" step="0.5" value="4"><span class="suf">%</span></div>
+  </div>
+  <div class="fld">
+   <div class="lrow"><label for="yrs">Years of growth</label><button type="button" class="qm" aria-label="Explain Years of growth" aria-expanded="false" aria-describedby="q-yrs">?</button><span id="q-yrs" class="sr">How many years you plan to leave the money alone before you use it.</span></div>
+   <div class="inp"><input id="yrs" type="number" inputmode="numeric" min="1" max="120" step="1" value="10"></div>
+  </div>
+  <button type="submit" class="btn gold gobtn" id="go">Calculate</button>
+  <div id="qtip" role="tooltip"></div>
+ </form>
+
+ <div class="res">
+
+  <div id="out" aria-live="polite">
+   <div class="hlead" id="leadTxt">In 10 years you'd have</div>
+   <div class="hbig" id="sTotal">$29,542</div>
+
+   <div class="vhead">
+    <div class="vtitle" id="vTitle">Growth over time</div>
+    <div class="vtabs" role="group" aria-label="Choose how to see the results">
+     <button type="button" id="vChart" aria-pressed="true" aria-label="Show the chart" title="Chart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V13M9.5 20V9M15 20v-4.5M20.5 20V5.5"/></svg></button>
+     <button type="button" id="vTable" aria-pressed="false" aria-label="Show the table" title="Table"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><path d="M3 9.75h18M9.5 9.75V19.5"/></svg></button>
+    </div>
+   </div>
+
+   <div id="paneChart">
+    <div class="chartwrap">
+     <div class="chartbox"><svg id="chart" viewBox="0 0 520 230" role="img" aria-labelledby="chartTitle"><title id="chartTitle">Balance each year</title></svg></div>
+     <div id="tip" role="status"></div>
+    </div>
+    <div class="legend">
+     <div><i style="background:#9C7430"></i>Principal</div>
+     <div><i style="background:#D2B27A"></i>Growth</div>
+    </div>
+   </div>
+
+   <div id="paneTable" hidden>
+    <div class="tablebox">
+     <table class="yr">
+      <thead><tr>
+       <th scope="col">Year</th><th scope="col">Starting balance</th><th scope="col">Added this year</th>
+       <th scope="col">Added so far</th><th scope="col">Growth this year</th><th scope="col">Growth so far</th>
+       <th scope="col">Total balance</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+     </table>
+    </div>
+   </div>
+  </div>
+ </div>
+
+</div>
+
+<div class="disc"><b>This is an estimate, not advice.</b> It assumes the same return every year, which real investments do not do, and it ignores tax, fees and inflation, so your actual result will be different. It is not a recommendation to invest in anything. Talk to us about your own situation before acting on it.</div>
+
+</div></section>
+<footer><div class="wrap"><div class="foot">
+<div><div class="nm">HIRSCH <span>CPA</span></div><div class="sb">Hirsch &amp; Co. Accounting LLC · Certified Public Accountants</div></div>
+<div class="fcol"><h5>Services</h5><a href="services/tax-preparation.html">Tax Preparation</a><a href="services/bookkeeping.html">Bookkeeping</a><a href="services/payroll.html">Payroll</a><a href="services/sales-tax.html">Sales Tax</a><a href="services/audit.html">Audit</a><a href="services/advisory.html">Advisory</a></div>
+<div class="fcol"><h5>Resources</h5><a href="https://hirsch-portal.vercel.app" target="_blank" rel="noopener">Client Login</a><a href="track-refund.html">Track Your Refund</a><a href="tax-due-dates.html">Due Dates</a><a href="index.html#about">About</a><a href="contact.html">Contact</a></div>
+<div class="fcol"><h5>Get in touch</h5><a href="mailto:info@hirsch.cpa">info@hirsch.cpa</a><a href="tel:+13474862780">(347) 486-2780</a><a href="contact.html">Book a call</a></div>
+</div><div class="copy"><span>© 2026 Hirsch &amp; Co. Accounting LLC. All rights reserved.</span><span><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></span></div></div></footer><script>function accToggle(b){var s=b.nextElementSibling;b.classList.toggle("open");if(s)s.classList.toggle("open");}
+function toggleMenu(){var m=document.getElementById("mmenu"),b=document.getElementById("mbackdrop");var o=m.classList.toggle("open");if(b)b.classList.toggle("open",o);document.body.style.overflow=o?"hidden":"";}
+document.querySelectorAll("#mmenu a").forEach(function(a){a.addEventListener("click",function(){var m=document.getElementById("mmenu"),b=document.getElementById("mbackdrop");m.classList.remove("open");if(b)b.classList.remove("open");document.body.style.overflow="";});});
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}})},{threshold:0,rootMargin:"0px 0px 12% 0px"});
+document.querySelectorAll(".reveal").forEach(function(el){io.observe(el);});</script>
+<script>
+(function(){
+ var $=function(id){return document.getElementById(id)};
+  /* At the top of the ranges the numbers stop being everyday sized, so past a
+    quadrillion we switch to short form rather than print 70 digits. */
+ /* Anything a real person enters prints in full: 120 years at 10% is about
+    $3.5 billion, which is 13 characters. Only rates above roughly 15% push past
+    a trillion, and past a thousand trillion the exact figure stops meaning
+    anything, so we say plainly that it is above that rather than printing 71
+    digits or a number in scientific notation. */
+ var money=function(n){
+   if(!isFinite(n)) return '$0';
+   n=Math.abs(n);
+   if(n>=1e15) return 'more than $1,000 trillion';
+   if(n>=1e12) return '$'+(n/1e12).toFixed(n<1e13?2:0)+' trillion';
+   return '$'+Math.round(n).toLocaleString('en-US');
+ };
+ var shortMoney=function(n){
+   if(!isFinite(n)) return '$0';
+   if(n>=1e15) return '$1,000T+';
+   var u=[[1e12,'T'],[1e9,'B'],[1e6,'M'],[1e3,'K']];
+   for(var i=0;i<u.length;i++){
+     if(n<u[i][0]) continue;
+     var v=n/u[i][0], txt=v.toFixed(v<10?1:0);
+     /* 999,999,999,999 rounds to 1000B, which reads oddly; promote it to 1.0T */
+     if(parseFloat(txt)>=1000&&i>0){ v=n/u[i-1][0]; return '$'+v.toFixed(v<10?1:0)+u[i-1][1]; }
+     return '$'+txt+u[i][1];
+   }
+   return '$'+Math.round(n);
+ };
+ var num=function(el,min,max,dflt){var v=parseFloat(String(el.value).replace(/,/g,''));if(!isFinite(v))v=dflt;if(v<min)v=min;if(max!=null&&v>max)v=max;return v};
+ /* Money fields are text inputs, not number inputs, because a number input
+    refuses to hold commas. This reformats as you type and puts the caret back
+    where it was, counting digits rather than characters. */
+ var commas=function(s){return s.replace(/\B(?=(\d{3})+(?!\d))/g,',')};
+ function fmtField(el){
+   var v=String(el.value), caret=(el.selectionStart==null)?v.length:el.selectionStart;
+   var before=v.slice(0,caret).replace(/[^0-9.]/g,'').length;
+   var clean=v.replace(/[^0-9.]/g,''), parts=clean.split('.');
+   var out=commas(parts[0]);
+   if(parts.length>1) out+='.'+parts.slice(1).join('').slice(0,2);
+   if(out===v) return;
+   el.value=out;
+   var seen=0,pos=0;
+   for(;pos<out.length&&seen<before;pos++){ if(/[0-9.]/.test(out.charAt(pos))) seen++; }
+   try{ el.setSelectionRange(pos,pos); }catch(e){}
+ }
+ function wireMoney(ids){
+   ids.forEach(function(id){
+     var el=$(id); if(!el) return;
+     fmtField(el);
+     el.addEventListener('input',function(){fmtField(el)});
+     el.addEventListener('blur',function(){fmtField(el)});
+   });
+ }
+
+ var rows=[];
+
+ /* Monthly compounding. Money is added at the end of each period.
+    Matches the reference: $5,000 plus $150 a month at 4% gives $7,037 after year 1. */
+ function project(p0,pmt,perYear,ratePct,years){
+   var i=(ratePct/100)/12, bal=p0, cumAdd=0, cumInt=0, out=[];
+   for(var y=1;y<=years;y++){
+     var start=bal, addY=0, intY=0;
+     for(var m=1;m<=12;m++){
+       var g=bal*i; bal+=g; intY+=g;
+       if(perYear===12){ bal+=pmt; addY+=pmt; }
+       else if(m===12){ bal+=pmt; addY+=pmt; }
+     }
+     cumAdd+=addY; cumInt+=intY;
+     out.push({year:y,start:start,addY:addY,cumAdd:cumAdd,intY:intY,cumInt:cumInt,
+               balance:bal,principal:p0+cumAdd});
+   }
+   return out;
+ }
+
+ function chartWidth(){
+   var box=document.querySelector('.chartbox');
+   var w=box?Math.round(box.clientWidth):0;
+   return w>60?w:520;
+ }
+ var geo={n:0,padL:44,padT:8,ch:200,slot:0,bw:0,top:1,W:520,H:230};
+ function drawChart(){
+   if(!rows.length) return;
+   var W=chartWidth(), H=W<380?190:230;
+   var padL=44,padR=6,padB=22,padT=8;
+   var cw=W-padL-padR, ch=H-padT-padB;
+   var max=Math.max.apply(null,rows.map(function(r){return r.balance}))||1;
+   var mag=Math.pow(10,Math.floor(Math.log10(max))), top=Math.ceil(max/(mag/2))*(mag/2);
+   if(!isFinite(top)||top<=0)top=max>0?max:1;
+   var n=rows.length;
+   var slot=cw/n, gap=slot>10?Math.min(4,slot*0.22):(slot>4?1:0);
+   var bw=Math.max(0.7,slot-gap);
+   geo={n:n,padL:padL,padT:padT,ch:ch,slot:slot,bw:bw,top:top,W:W,H:H};
+   var y=function(v){return padT+ch-(v/top)*ch}, s='';
+   for(var g=0;g<=3;g++){
+     var val=top*g/3, yy=y(val);
+     s+='<line x1="'+padL+'" y1="'+yy.toFixed(1)+'" x2="'+(W-padR)+'" y2="'+yy.toFixed(1)+'" stroke="#E8DFCF" stroke-width="1"/>';
+     s+='<text x="'+(padL-7)+'" y="'+(yy+3.6).toFixed(1)+'" text-anchor="end" font-family="Inter,sans-serif" font-size="10" fill="#8B7E6C">'+shortMoney(val)+'</text>';
+   }
+   var step=Math.max(1,Math.ceil(n/Math.max(2,Math.floor(cw/26))));
+   rows.forEach(function(r,idx){
+     var x=padL+idx*slot+gap/2, base=0;
+     [[r.principal,'#9C7430'],[r.cumInt,'#D2B27A']].forEach(function(sg){
+       var v=Math.max(0,sg[0]); if(v<=0)return;
+       var y1=y(base+v), y0=y(base);
+       s+='<rect class="seg" data-i="'+idx+'" x="'+x.toFixed(2)+'" y="'+y1.toFixed(1)+'" width="'+bw.toFixed(2)+'" height="'+Math.max(0,y0-y1).toFixed(1)+'" fill="'+sg[1]+'"/>';
+       base+=v;
+     });
+     if(((idx+1)%step===0)||idx===n-1)
+       s+='<text x="'+(x+bw/2).toFixed(1)+'" y="'+(H-6)+'" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#8B7E6C">'+r.year+'</text>';
+   });
+   /* One transparent overlay does the pointing. With 120 years each bar is under
+      2px wide, far too small to tap, so the year is worked out from where the
+      pointer is rather than from which bar was hit. */
+   s+='<rect class="plot" x="'+padL+'" y="'+padT+'" width="'+cw.toFixed(1)+'" height="'+ch.toFixed(1)+
+      '" fill="transparent" tabindex="0" role="img" aria-label="Balance for each year. Use the left and right arrow keys to step through the years, or read the table view."/>';
+   var tp=$('tip'); if(tp) tp.style.opacity='0';
+   var el=$('chart');
+   el.setAttribute('viewBox','0 0 '+W+' '+H);
+   el.innerHTML='<title id="chartTitle">Balance each year</title>'+s;
+   wirePlot();
+ }
+ function dimOthers(active){
+   var segs=$('chart').querySelectorAll('rect.seg');
+   for(var i=0;i<segs.length;i++){
+     segs[i].style.opacity = (active===null || +segs[i].getAttribute('data-i')===active) ? '' : '0.2';
+   }
+ }
+ var sel=-1, plotWired=false;
+ function clearTip(){ $('tip').style.opacity='0'; dimOthers(null); sel=-1; }
+ function showYear(idx){
+   var r=rows[idx]; if(!r) return;
+   var tip=$('tip'), wrap=document.querySelector('.chartwrap'), svg=$('chart');
+   tip.innerHTML='<div class="ty">Year '+r.year+'</div>'+
+     '<div class="tr"><span>Principal</span><b>'+money(r.principal)+'</b></div>'+
+     '<div class="tr"><span>Growth</span><b>'+money(r.cumInt)+'</b></div>';
+   tip.style.opacity='1';
+   var sr=svg.getBoundingClientRect(), wr=wrap.getBoundingClientRect();
+   var scale=geo.W?sr.width/geo.W:1;
+   var cx=sr.left+(geo.padL+idx*geo.slot+geo.slot/2)*scale;
+   var yv=geo.padT+geo.ch-(r.balance/geo.top)*geo.ch;
+   var barTop=sr.top+yv*scale;
+   var tw=tip.offsetWidth;
+   tip.style.left=Math.max(4,Math.min(cx-wr.left-tw/2,wr.clientWidth-tw-4))+'px';
+   tip.style.top=Math.max(0,barTop-wr.top-tip.offsetHeight-10)+'px';
+   dimOthers(idx); sel=idx;
+ }
+ function wirePlot(){
+   var plot=$('chart').querySelector('rect.plot'); if(!plot) return;
+   function idxAt(clientX){
+     var r=plot.getBoundingClientRect();
+     if(r.width<=0) return 0;
+     var i=Math.floor(((clientX-r.left)/r.width)*geo.n);
+     return Math.max(0,Math.min(geo.n-1,i));
+   }
+   plot.addEventListener('mousemove',function(e){ showYear(idxAt(e.clientX)) });
+   plot.addEventListener('mouseleave',clearTip);
+   plot.addEventListener('touchstart',function(e){ if(e.touches[0]) showYear(idxAt(e.touches[0].clientX)) },{passive:true});
+   plot.addEventListener('touchmove',function(e){ if(e.touches[0]) showYear(idxAt(e.touches[0].clientX)) },{passive:true});
+   plot.addEventListener('focus',function(){ showYear(sel<0?0:sel) });
+   plot.addEventListener('blur',clearTip);
+   plot.addEventListener('keydown',function(e){
+     if(e.key==='ArrowRight'||e.key==='ArrowLeft'){
+       e.preventDefault();
+       showYear(Math.max(0,Math.min(geo.n-1,(sel<0?0:sel)+(e.key==='ArrowRight'?1:-1))));
+     } else if(e.key==='Escape'){ clearTip(); }
+   });
+   if(!plotWired){
+     plotWired=true;
+     document.querySelector('.chartwrap').addEventListener('mouseleave',clearTip);
+     /* no hover on a phone: a tap outside the chart puts everything back */
+     document.addEventListener('touchstart',function(e){
+       var t=e.target;
+       if(!(t && t.closest && t.closest('.chartwrap'))) clearTip();
+     },{passive:true});
+   }
+ }
+ /* the headline shrinks rather than spilling out of its panel */
+ function fitBig(){
+   var el=$('sTotal'); if(!el) return;
+   el.style.fontSize='';
+   var box=el.parentElement?el.parentElement.clientWidth:0;
+   if(!box) return;
+   var size=parseFloat(getComputedStyle(el).fontSize), guard=0;
+   while(el.scrollWidth>box && size>15 && guard<60){ size-=2; el.style.fontSize=size+'px'; guard++; }
+ }
+ function drawTable(){
+   $('tbody').innerHTML=rows.map(function(r){
+     return '<tr><td>'+r.year+'</td><td>'+money(r.start)+'</td><td>'+money(r.addY)+'</td><td>'+money(r.cumAdd)+
+            '</td><td>'+money(r.intY)+'</td><td>'+money(r.cumInt)+'</td><td class="tot">'+money(r.balance)+'</td></tr>';
+   }).join('');
+ }
+
+ function calculate(){
+   var p0=num($('p0'),0,null,0), pmt=num($('pmt'),0,null,0),
+       rate=num($('rate'),0,100,0), yrs=Math.round(num($('yrs'),1,120,1)),
+       per=parseInt(document.querySelector('input[name=freq]:checked').value,10);
+   rows=project(p0,pmt,per,rate,yrs);
+   var last=rows[rows.length-1];
+   $('leadTxt').textContent='In '+yrs+(yrs===1?' year':' years')+" you'd have";
+   $('sTotal').textContent=money(last.balance);
+   fitBig();
+   drawChart(); drawTable();
+ }
+
+ wireMoney(['p0','pmt']);
+ $('f').addEventListener('submit',function(e){e.preventDefault();calculate()});
+
+ function setView(chart){
+   $('vChart').setAttribute('aria-pressed',chart); $('vTable').setAttribute('aria-pressed',!chart);
+   $('paneChart').hidden=!chart; $('paneTable').hidden=chart;
+   $('vTitle').textContent=chart?'Growth over time':'Year by year';
+   if(chart) drawChart();   /* the box had no width while it was hidden */
+ }
+ /* the question marks: hover on a mouse, tap on a phone, escape or a tap away closes */
+ (function(){
+   var qtip=$('qtip'), qs=[].slice.call(document.querySelectorAll('.qm')), openBtn=null, pinned=false;
+   function place(btn){
+     var host=qtip.offsetParent||qtip.parentElement;
+     var hr=host.getBoundingClientRect(), br=btn.getBoundingClientRect();
+     qtip.style.left='0px';
+     var tw=qtip.offsetWidth;
+     var left=br.left-hr.left+br.width/2-tw/2;
+     qtip.style.left=Math.max(6,Math.min(left,hr.clientWidth-tw-6))+'px';
+     qtip.style.top=(br.bottom-hr.top+9)+'px';
+   }
+   function open(btn,pin){
+     var src=document.getElementById(btn.getAttribute('aria-describedby'));
+     qtip.textContent=src?src.textContent:'';
+     qtip.classList.add('on');
+     place(btn);
+     if(openBtn&&openBtn!==btn) openBtn.setAttribute('aria-expanded','false');
+     btn.setAttribute('aria-expanded','true');
+     openBtn=btn; if(pin) pinned=true;
+   }
+   function close(){
+     qtip.classList.remove('on'); pinned=false;
+     if(openBtn){ openBtn.setAttribute('aria-expanded','false'); openBtn=null; }
+   }
+   qs.forEach(function(btn){
+     btn.addEventListener('mouseenter',function(){ if(!pinned) open(btn,false) });
+     btn.addEventListener('mouseleave',function(){ if(!pinned) close() });
+     btn.addEventListener('focus',function(){ open(btn,false) });
+     btn.addEventListener('blur',function(){ if(!pinned) close() });
+     btn.addEventListener('click',function(e){
+       e.preventDefault(); e.stopPropagation();
+       if(pinned&&openBtn===btn){ close(); } else { open(btn,true); }
+     });
+   });
+   document.addEventListener('click',function(e){
+     if(!(e.target&&e.target.closest&&e.target.closest('.qm'))) close();
+   });
+   document.addEventListener('touchstart',function(e){
+     if(!(e.target&&e.target.closest&&e.target.closest('.qm'))) close();
+   },{passive:true});
+   document.addEventListener('keydown',function(e){ if(e.key==='Escape') close() });
+   window.addEventListener('resize',function(){ if(openBtn) place(openBtn) });
+ })();
+
+ $('vChart').addEventListener('click',function(){setView(true)});
+ $('vTable').addEventListener('click',function(){setView(false)});
+
+ /* Work it out once on load from the defaults, so the page never shows an empty
+    result. After this it only recalculates when Calculate is pressed. */
+ calculate();
+ var rz; window.addEventListener('resize',function(){
+   clearTimeout(rz); rz=setTimeout(function(){ fitBig(); if(!$('paneChart').hidden) drawChart(); },150);
+ });
+})();
+</script>
+</body></html>
