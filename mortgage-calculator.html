@@ -1,0 +1,620 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mortgage Payment Calculator · Hirsch CPA</title><meta name="description" content="Work out what a home loan would cost you each month, and what the interest adds up to over the whole term."><link rel="icon" href="assets/logo-emblem.png">
+<!-- Social share / link preview (Open Graph + Twitter Card) -->
+<link rel="canonical" href="https://hirsch-cpa-website.vercel.app/mortgage-calculator.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Hirsch &amp; Co. Accounting LLC">
+<meta property="og:title" content="Mortgage Payment Calculator • Hirsch CPA">
+<meta property="og:description" content="Work out what a home loan would cost you each month, and what the interest adds up to over the whole term.">
+<meta property="og:url" content="https://hirsch-cpa-website.vercel.app/mortgage-calculator.html">
+<meta property="og:image" content="https://hirsch-cpa-website.vercel.app/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Hirsch &amp; Co. Accounting LLC • Certified Public Accountants">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Mortgage Payment Calculator • Hirsch CPA">
+<meta name="twitter:description" content="Work out what a home loan would cost you each month, and what the interest adds up to over the whole term.">
+<meta name="twitter:image" content="https://hirsch-cpa-website.vercel.app/assets/og-image.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+/* ===== calculator ===== */
+.calc{display:grid;grid-template-columns:.8fr 1.2fr;gap:40px;align-items:start;max-width:1000px;margin:0 auto}
+.calc>*{min-width:0}
+.cpanel{background:var(--cream);border:1px solid var(--line);border-radius:16px;padding:26px}
+.fld{margin-bottom:18px}
+.fld label,.fld .lb{display:block;font-size:14.5px;font-weight:600;color:var(--ink);margin-bottom:7px}
+/* label plus a small question mark that explains the field */
+.lrow{display:flex;align-items:center;gap:7px;margin-bottom:7px}
+.lrow label,.lrow .lb{margin-bottom:0}
+.qm{position:relative;width:17px;height:17px;flex:none;padding:0;border:1.2px solid var(--muted);border-radius:50%;background:none;color:var(--muted);font-family:inherit;font-size:11px;font-weight:700;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:color .15s,border-color .15s}
+.qm:hover,.qm[aria-expanded="true"]{border-color:var(--gold-d);color:var(--gold-d)}
+.qm:focus-visible{outline:2px solid var(--gold-d);outline-offset:2px}
+.qm::before{content:"";position:absolute;left:-9px;right:-9px;top:-9px;bottom:-9px}
+.sr{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+#qtip{position:absolute;z-index:20;max-width:250px;background:var(--ink);color:#fff;border-radius:9px;padding:10px 13px;font-size:13px;line-height:1.5;box-shadow:0 10px 26px rgba(0,0,0,.25);opacity:0;visibility:hidden;transition:opacity .12s;pointer-events:none}
+#qtip.on{opacity:1;visibility:visible}
+.inp{position:relative;display:flex;align-items:center}
+.inp .pre,.inp .suf{position:absolute;font-size:16px;font-weight:600;color:var(--muted);pointer-events:none}
+.inp .pre{left:14px}.inp .suf{right:14px}
+.inp input{width:100%;padding:14px 15px;border:1px solid var(--line);border-radius:9px;font-family:inherit;font-size:17px;font-weight:600;background:#fff;color:var(--ink);-moz-appearance:textfield}
+.inp input::-webkit-outer-spin-button,.inp input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.inp.money input{padding-left:29px}
+.inp.pct input{padding-right:33px}
+.inp input:focus{outline:2px solid var(--gold-d);outline-offset:1px;border-color:var(--gold-d)}
+.pcthint{font-size:13px;color:var(--muted);margin-top:6px}
+/* term choice: plain radio buttons, small and quiet */
+.freq{display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin-top:2px}
+.freq label{display:inline-flex;align-items:center;gap:8px;margin:0;font-size:13.5px;font-weight:500;color:var(--body);cursor:pointer;line-height:1.4;padding:8px 0}
+.freq input{appearance:none;-webkit-appearance:none;position:relative;width:15px;height:15px;margin:0;flex:none;border:1.5px solid var(--muted);border-radius:50%;background:#fff;cursor:pointer}
+.freq input:checked{border-color:var(--gold-d)}
+.freq input:checked::after{content:"";position:absolute;left:50%;top:50%;width:7px;height:7px;margin:-3.5px 0 0 -3.5px;border-radius:50%;background:var(--gold-d)}
+.freq input:focus-visible{outline:2px solid var(--gold-d);outline-offset:2px}
+.freq label:hover{color:var(--ink)}
+/* 24px of air above the button, matching calculator 1. There the button follows
+   a .fld whose 18px bottom margin plus 6px here makes 24. The fields in the
+   side-by-side grid have their bottom margin removed, so without this the gap
+   collapsed to 6px and the button sat on top of the insurance field. */
+.gobtn{width:100%;justify-content:center;margin-top:24px;font-size:16px;padding:15px 24px;min-height:50px}
+
+.res{background:#fff;border:1px solid var(--line);border-radius:16px;padding:26px}
+/* one figure, no box: a small gold line above a large serif number */
+.hlead{font-size:14.5px;color:var(--gold-d);font-weight:500;margin-bottom:4px}
+.hbig{font-family:'Fraunces',Georgia,serif;font-size:58px;font-weight:600;color:var(--ink);line-height:1.02;letter-spacing:-.02em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.hnote{font-size:13.5px;color:var(--muted);line-height:1.6;margin-top:10px}
+/* View header, identical to calculator 1: centred title, icon toggle on the
+   right. Two views here, the same as there. */
+.vhead{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;margin:26px 0 12px}
+.vtitle{grid-column:2;text-align:center;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-d);font-weight:700}
+.vtabs{grid-column:3;justify-self:end;display:flex;align-items:center;flex:none}
+.vtabs button{background:none;border:0;padding:0 14px;margin:0;cursor:pointer;color:var(--gold-d);display:flex;align-items:center;justify-content:center;min-height:44px;transition:color .15s}
+.vtabs button+button{border-left:1px solid var(--line)}
+.vtabs button:hover{color:var(--ink)}
+.vtabs button[aria-pressed="true"]{color:var(--ink)}
+.vtabs button:focus-visible{outline:2px solid var(--gold-d);outline-offset:2px;border-radius:6px}
+.vtabs svg{width:21px;height:21px;display:block}
+.bar{position:relative}
+.donutwrap{position:relative;display:flex;justify-content:center;padding:4px 0 2px}
+.donutwrap svg{width:100%;max-width:236px;height:auto;display:block;overflow:visible}
+/* Nothing in the chart is clickable or focusable, deliberately. Pointing at it
+   is the whole interaction, exactly as on calculator 1. */
+.donutwrap svg circle{cursor:default;transition:opacity .13s ease}
+#btip{position:absolute;pointer-events:none;opacity:0;transition:opacity .12s;background:var(--ink);color:#fff;border-radius:9px;padding:10px 13px;font-size:13px;line-height:1.5;box-shadow:0 10px 26px rgba(0,0,0,.25);z-index:5;white-space:nowrap}
+#btip .ty{font-weight:700;font-size:13.5px;margin-bottom:5px;color:#fff}
+#btip .tr{display:flex;justify-content:space-between;gap:16px}
+#btip .tr span{color:#D9D0C2}
+#btip .tr b{font-variant-numeric:tabular-nums}
+/* Year-by-year payoff schedule, styled exactly like calculator 1's table. */
+.tablebox{overflow:auto;-webkit-overflow-scrolling:touch}
+table.yr{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+/* The header row stays put while the years scroll under it. Sticky against the
+   box, not the page, so it pins vertically and still travels sideways with the
+   columns when the table is scrolled across on a phone. The underline is an
+   inset shadow rather than a border: a border on a sticky cell scrolls away with
+   the row in some browsers, the shadow does not. The white background is the
+   card's own, so rows cannot show through as they pass beneath. */
+table.yr th{text-align:right;font-weight:700;color:var(--gold-d);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:3px 0 9px;white-space:nowrap;position:sticky;top:0;z-index:2;background:#fff;box-shadow:inset 0 -1px 0 var(--line)}
+table.yr th:first-child,table.yr td:first-child{text-align:left}
+table.yr td{text-align:right;padding:8px 0;border-bottom:1px solid var(--line);color:var(--body);white-space:nowrap}
+table.yr th+th,table.yr td+td{padding-left:14px}
+table.yr tr:last-child td{border-bottom:none}
+table.yr td.tot{font-weight:700;color:var(--ink)}
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:11px}
+.legend div{display:flex;align-items:center;gap:7px;font-size:13.5px;color:var(--body)}
+.legend em{width:12px;height:12px;border-radius:3px;flex:none;font-style:normal}
+
+.brk .row{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}
+.brk .row:last-child{border-bottom:none}
+.brk .k{font-size:14.5px;color:var(--body)}
+.brk .v{font-size:16px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.brk .row.tot .k{font-weight:700;color:var(--ink)}
+.brk .row.tot .v{color:var(--gold-d);font-size:18px}
+.opt{margin-top:20px;padding-top:16px;border-top:1px solid var(--line)}
+.opt .oh{font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.opt .os{font-size:13px;color:var(--muted);margin-bottom:14px}
+.optgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.optgrid .fld{margin-bottom:0}
+.optgrid label{font-size:13px}
+.fullcost{margin-top:16px;background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.fullcost .k{font-size:14.5px;font-weight:600;color:var(--ink)}
+.fullcost .v{font-size:20px;font-weight:700;color:var(--gold-d);font-variant-numeric:tabular-nums}
+.disc{background:var(--cream);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:12px;padding:16px 18px;font-size:13.5px;line-height:1.65;color:var(--ink);max-width:1000px;margin:30px auto 0}
+@media(max-width:860px){.calc{grid-template-columns:1fr;gap:24px}.res,.cpanel{padding:20px}.hbig{font-size:42px}.optgrid{grid-template-columns:1fr}
+.vhead{grid-template-columns:1fr;gap:6px}.vtitle{grid-column:1}.vtabs{grid-column:1;justify-self:end}}
+</style><script>document.documentElement.className+=" js-motion";</script></head><body><header><div class="wrap nav">
+<a href="index.html#top" class="brand"><img src="assets/logo-emblem.png" alt="Hirsch CPA"><div class="bt"><div class="nmrow"><span class="h">HIRSCH</span> <span class="c">CPA</span></div><div class="subttl">Certified Public Accountants</div></div></a>
+<nav class="nl">
+ <div class="drop"><a class="l" href="index.html#services">Services <span class="cv">&#9662;</span></a><div class="dmenu"><a href="services/tax-preparation.html">Tax Preparation</a><a href="services/bookkeeping.html">Bookkeeping</a><a href="services/payroll.html">Payroll</a><a href="services/sales-tax.html">Sales Tax</a><a href="services/audit.html">Audit</a><a href="services/advisory.html">Advisory</a></div></div>
+ <div class="drop"><a class="l" href="track-refund.html">Resources <span class="cv">&#9662;</span></a><div class="dmenu"><a href="track-refund.html">Track Your Refund</a><a href="tax-due-dates.html">Due Dates</a><a href="calculators.html">Financial Calculators</a></div></div>
+ <a class="l" href="index.html#about">About</a><a class="l" href="contact.html">Contact</a>
+ <a class="btn login" href="https://hirsch-portal.vercel.app" target="_blank" rel="noopener"><span class="dot"></span><span class="clw">Client </span>Login</a><a class="btn gold" href="contact.html">Book a call</a></nav>
+<button class="burger" aria-label="Menu" onclick="toggleMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+</div></header>
+<div class="mbackdrop" id="mbackdrop" onclick="toggleMenu()"></div><div class="mmenu" id="mmenu">
+<a class="mlogin" href="https://hirsch-portal.vercel.app" target="_blank" rel="noopener"><span class="dot"></span>Client Login</a>
+<button class="macc" onclick="accToggle(this)">Services <span class="av">&#9662;</span></button><div class="msub"><a href="services/tax-preparation.html">Tax Preparation</a><a href="services/bookkeeping.html">Bookkeeping</a><a href="services/payroll.html">Payroll</a><a href="services/sales-tax.html">Sales Tax</a><a href="services/audit.html">Audit</a><a href="services/advisory.html">Advisory</a></div>
+<button class="macc" onclick="accToggle(this)">Resources <span class="av">&#9662;</span></button><div class="msub"><a href="track-refund.html">Track Your Refund</a><a href="tax-due-dates.html">Due Dates</a><a href="calculators.html">Financial Calculators</a></div>
+<a class="mbook" href="contact.html">Book a call</a></div>
+<section class="phero"><img class="wm" src="assets/logo-emblem.png" alt=""><div class="wrap"><h1>Mortgage Payment Calculator</h1><p>Estimate what a home loan would cost you each month. Enter the price, what you are putting down, the interest rate and how long you would pay it over to see your payment and what the loan costs in total.</p></div></section>
+
+<section class="detail"><div class="wrap">
+<div class="calc">
+
+ <form class="cpanel" id="f" novalidate style="position:relative">
+  <div class="fld">
+   <div class="lrow"><label for="price">Home price</label><button type="button" class="qm" aria-label="Explain Home price" aria-expanded="false" aria-describedby="q-price">?</button><span id="q-price" class="sr">The full asking price, before your deposit comes off it.</span></div>
+   <div class="inp money"><span class="pre">$</span><input id="price" type="text" inputmode="decimal" autocomplete="off" value="450,000"></div>
+  </div>
+
+  <div class="fld">
+   <div class="lrow"><label for="down">Down payment</label><button type="button" class="qm" aria-label="Explain Down payment" aria-expanded="false" aria-describedby="q-down">?</button><span id="q-down" class="sr">The cash you pay up front. Whatever is left over is what you borrow.</span></div>
+   <div class="inp money"><span class="pre">$</span><input id="down" type="text" inputmode="decimal" autocomplete="off" value="90,000"></div>
+   <div class="pcthint" id="pctHint">That's 20% of the price.</div>
+  </div>
+
+  <div class="fld">
+   <div class="lrow"><label for="rate">Interest rate</label><button type="button" class="qm" aria-label="Explain Interest rate" aria-expanded="false" aria-describedby="q-rate">?</button><span id="q-rate" class="sr">The yearly rate the lender charges. If you do not have a quote yet, put in a rough figure to see the effect.</span></div>
+   <div class="inp pct"><input id="rate" type="number" inputmode="decimal" min="0" max="25" step="0.25" value="6.5"><span class="suf">%</span></div>
+  </div>
+
+  <div class="fld">
+   <div class="lrow"><span class="lb">How long you'll pay it over</span><button type="button" class="qm" aria-label="Explain how long you'll pay it over" aria-expanded="false" aria-describedby="q-term">?</button><span id="q-term" class="sr">How many years you take to pay the loan back. A shorter term costs more each month but a lot less in interest overall.</span></div>
+   <div class="freq" role="radiogroup" aria-label="How long you will pay it over">
+    <label><input type="radio" name="term" value="30" checked>30 years</label>
+    <label><input type="radio" name="term" value="20">20 years</label>
+    <label><input type="radio" name="term" value="15">15 years</label>
+   </div>
+  </div>
+
+  <div class="opt">
+   <div class="oh">Taxes and insurance</div>
+   <div class="os">Both are yearly amounts. Optional, but the total above only includes them once you fill them in.</div>
+   <div class="optgrid">
+    <div class="fld">
+     <div class="lrow"><label for="tax">Property tax</label><button type="button" class="qm" aria-label="Explain Property tax" aria-expanded="false" aria-describedby="q-tax">?</button><span id="q-tax" class="sr">What the local authority charges on the home each year. The listing or your agent usually shows it.</span></div>
+     <div class="inp money"><span class="pre">$</span><input id="tax" type="text" inputmode="decimal" autocomplete="off" value=""></div>
+    </div>
+    <div class="fld">
+     <div class="lrow"><label for="ins">Home insurance</label><button type="button" class="qm" aria-label="Explain Home insurance" aria-expanded="false" aria-describedby="q-ins">?</button><span id="q-ins" class="sr">What insuring the building costs each year. Lenders normally require you to have it.</span></div>
+     <div class="inp money"><span class="pre">$</span><input id="ins" type="text" inputmode="decimal" autocomplete="off" value=""></div>
+    </div>
+   </div>
+  </div>
+  <button type="submit" class="btn gold gobtn" id="go">Calculate</button>
+  <div id="qtip" role="tooltip"></div>
+ </form>
+
+ <div class="res">
+  <div id="out" aria-live="polite">
+   <div class="hlead" id="hlead">Your monthly payment would be</div>
+   <div class="hbig" id="total">$2,275</div>
+   <p class="hnote" id="hnote">This is the loan repayment only. Property tax, home insurance and any fees are charged on top. Add yours on the left to see the full monthly cost.</p>
+
+   <div class="vhead">
+    <div class="vtitle" id="vTitle">What you borrow, and what it costs</div>
+    <div class="vtabs" role="group" aria-label="Choose how to see the results">
+     <button type="button" id="vChart" aria-pressed="true" aria-label="Show the chart" title="Chart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V13M9.5 20V9M15 20v-4.5M20.5 20V5.5"/></svg></button>
+     <button type="button" id="vTable" aria-pressed="false" aria-label="Show the breakdown" title="Breakdown"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><path d="M3 9.75h18M9.5 9.75V19.5"/></svg></button>
+     <button type="button" id="vSched" aria-pressed="false" aria-label="Show the year by year schedule" title="Year by year"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17.5 9 11l4 4 8-8.5"/><path d="M3 21h18"/></svg></button>
+    </div>
+   </div>
+
+   <div id="paneChart">
+    <div class="bar">
+     <div class="donutwrap">
+      <svg id="donut" viewBox="0 0 200 200" role="img" aria-labelledby="donutTitle"><title id="donutTitle">What you borrow, against the interest you would pay</title></svg>
+      <div id="btip" role="status"></div>
+     </div>
+     <div class="legend">
+      <div><em style="background:#7C5A22"></em>The amount you borrow</div>
+      <div><em style="background:#D2B27A"></em>Interest you'd pay</div>
+     </div>
+    </div>
+   </div>
+
+   <div id="paneTable" hidden>
+    <div class="brk">
+     <div class="row"><span class="k">Amount you borrow</span><span class="v" id="bLoan">$360,000</span></div>
+     <div class="row"><span class="k">Interest over the whole term</span><span class="v" id="bInt">$459,160</span></div>
+     <div class="row"><span class="k">Total you'd repay</span><span class="v" id="bPaid">$819,160</span></div>
+     <div class="row tot"><span class="k">Total cost, including your deposit</span><span class="v" id="bAll">$909,160</span></div>
+    </div>
+    <div class="fullcost"><span class="k">Monthly payment, without tax and insurance</span><span class="v" id="fullCost">$2,275</span></div>
+   </div>
+
+   <div id="paneSched" hidden>
+    <div class="tablebox">
+     <table class="yr">
+      <thead><tr>
+       <th scope="col">Year</th><th scope="col">Starting balance</th><th scope="col">Principal paid</th>
+       <th scope="col">Interest paid</th><th scope="col">Balance left</th>
+      </tr></thead>
+      <tbody id="schedBody"></tbody>
+     </table>
+    </div>
+   </div>
+  </div>
+ </div>
+
+</div>
+
+<div class="disc"><b>This is an estimate, not a loan offer or advice.</b> It assumes the interest rate never changes, and it leaves out closing costs, lender fees and mortgage insurance, which lenders usually add if you put down less than 20%. What a lender actually offers you will be different. Talk to us about your own situation before relying on it.</div>
+
+</div></section>
+
+<footer><div class="wrap"><div class="foot">
+<div><div class="nm">HIRSCH <span>CPA</span></div><div class="sb">Hirsch &amp; Co. Accounting LLC · Certified Public Accountants</div></div>
+<div class="fcol"><h5>Services</h5><a href="services/tax-preparation.html">Tax Preparation</a><a href="services/bookkeeping.html">Bookkeeping</a><a href="services/payroll.html">Payroll</a><a href="services/sales-tax.html">Sales Tax</a><a href="services/audit.html">Audit</a><a href="services/advisory.html">Advisory</a></div>
+<div class="fcol"><h5>Resources</h5><a href="https://hirsch-portal.vercel.app" target="_blank" rel="noopener">Client Login</a><a href="track-refund.html">Track Your Refund</a><a href="tax-due-dates.html">Due Dates</a><a href="index.html#about">About</a><a href="contact.html">Contact</a></div>
+<div class="fcol"><h5>Get in touch</h5><a href="mailto:info@hirsch.cpa">info@hirsch.cpa</a><a href="tel:+13474862780">(347) 486-2780</a><a href="contact.html">Book a call</a></div>
+</div><div class="copy"><span>© 2026 Hirsch &amp; Co. Accounting LLC. All rights reserved.</span><span><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></span></div></div></footer><script>function accToggle(b){var s=b.nextElementSibling;b.classList.toggle("open");if(s)s.classList.toggle("open");}
+function toggleMenu(){var m=document.getElementById("mmenu"),b=document.getElementById("mbackdrop");var o=m.classList.toggle("open");if(b)b.classList.toggle("open",o);document.body.style.overflow=o?"hidden":"";}
+document.querySelectorAll("#mmenu a").forEach(function(a){a.addEventListener("click",function(){var m=document.getElementById("mmenu"),b=document.getElementById("mbackdrop");m.classList.remove("open");if(b)b.classList.remove("open");document.body.style.overflow="";});});
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}})},{threshold:0,rootMargin:"0px 0px 12% 0px"});
+document.querySelectorAll(".reveal").forEach(function(el){io.observe(el);});</script>
+<script>
+(function(){
+ var $=function(id){return document.getElementById(id)};
+
+ /* Everyday figures print in full. Past a trillion we switch to plain words
+    rather than a wall of digits. */
+ var money=function(n){
+   if(!isFinite(n)) return '$0';
+   n=Math.abs(n);
+   if(n>=1e15) return 'more than $1,000 trillion';
+   if(n>=1e12) return '$'+(n/1e12).toFixed(n<1e13?2:0)+' trillion';
+   return '$'+Math.round(n).toLocaleString('en-US');
+ };
+ var num=function(el,min,max,dflt){var v=parseFloat(String(el.value).replace(/,/g,''));if(!isFinite(v))v=dflt;if(v<min)v=min;if(max!=null&&v>max)v=max;return v};
+
+ /* Money fields are text inputs, not number inputs, because a number input
+    refuses to hold commas. This reformats as you type and puts the caret back
+    where it was, counting digits rather than characters. */
+ var commas=function(s){return s.replace(/\B(?=(\d{3})+(?!\d))/g,',')};
+ function fmtField(el){
+   var v=String(el.value), caret=(el.selectionStart==null)?v.length:el.selectionStart;
+   var before=v.slice(0,caret).replace(/[^0-9.]/g,'').length;
+   var clean=v.replace(/[^0-9.]/g,''), parts=clean.split('.');
+   var out=commas(parts[0]);
+   if(parts.length>1) out+='.'+parts.slice(1).join('').slice(0,2);
+   if(out===v) return;
+   el.value=out;
+   var seen=0,pos=0;
+   for(;pos<out.length&&seen<before;pos++){ if(/[0-9.]/.test(out.charAt(pos))) seen++; }
+   try{ el.setSelectionRange(pos,pos); }catch(e){}
+ }
+ function wireMoney(ids){
+   ids.forEach(function(id){
+     var el=$(id); if(!el) return;
+     fmtField(el);
+     el.addEventListener('input',function(){fmtField(el)});
+     el.addEventListener('blur',function(){fmtField(el)});
+   });
+ }
+ wireMoney(['price','down','tax','ins']);
+
+ /* the headline shrinks rather than spilling out of its panel */
+ function fitBig(){
+   var el=$('total'); if(!el) return;
+   el.style.fontSize='';
+   var box=el.parentElement?el.parentElement.clientWidth:0;
+   if(!box) return;
+   var size=parseFloat(getComputedStyle(el).fontSize), guard=0;
+   while(el.scrollWidth>box && size>15 && guard<60){ size-=2; el.style.fontSize=size+'px'; guard++; }
+ }
+
+ function calculate(){
+   var price=num($('price'),0,null,0),
+       down=Math.min(num($('down'),0,null,0),price),
+       rate=num($('rate'),0,25,0),
+       yrs=parseInt(document.querySelector('input[name=term]:checked').value,10);
+
+   var loan=Math.max(0,price-down), i=(rate/100)/12, n=yrs*12, pi;
+   if(loan<=0) pi=0;
+   else if(i===0) pi=loan/n;
+   else { var f=Math.pow(1+i,n); pi=loan*(i*f)/(f-1); }
+
+   /* Walk the loan first, then take the totals FROM that walk. The closed-form
+      figure and the month-by-month sum differ by a dollar or two through
+      rounding, and a breakdown that disagrees with the schedule on the same page
+      is the kind of thing a client notices. One source of truth: the walk. */
+   var walk=buildSchedule(loan,i,n,pi);
+   var totalInt=walk.interest, totalPaid=loan+totalInt;
+
+   updatePct();
+   var tot=loan+totalInt;
+   var pL=tot>0?(loan/tot*100):0, pI=tot>0?(totalInt/tot*100):0;
+   /* what the two parts are worth, so pointing at one can say so */
+   barParts=[{label:'The amount you borrow',value:loan,pct:pL},
+             {label:"Interest you'd pay",value:totalInt,pct:pI}];
+   drawDonut();
+   hideBarTip();
+
+   $('bLoan').textContent=money(loan);
+   $('bInt').textContent=money(totalInt);
+   $('bPaid').textContent=money(totalPaid);
+   $('bAll').textContent=money(totalPaid+down);
+
+   /* THE HEADLINE IS THE FULL MONTHLY COST -- but only ever claims to include
+      what was actually entered. Both boxes empty and it says "monthly payment"
+      and tells you what is missing; fill either one and it becomes "full monthly
+      cost" and lists what is in it. The figure and the words always agree, so an
+      empty box can never make the big number quietly understate the real cost. */
+   var taxRaw=$('tax').value.trim(), insRaw=$('ins').value.trim();
+   var tax=num($('tax'),0,null,0), ins=num($('ins'),0,null,0);
+   var hasTax=taxRaw!=='' && tax>0, hasIns=insRaw!=='' && ins>0;
+   var full=pi+(hasTax?tax/12:0)+(hasIns?ins/12:0);
+
+   $('total').textContent=money(full);
+   fitBig();
+
+   if(!hasTax && !hasIns){
+     $('hlead').textContent='Your monthly payment would be';
+     $('hnote').innerHTML='<b>This is the loan repayment only.</b> Property tax and home insurance are charged on top. Add them on the left to see your full monthly cost.';
+   } else {
+     $('hlead').textContent='Your full monthly cost would be';
+     var inc=['the loan repayment'];
+     if(hasTax) inc.push('property tax');
+     if(hasIns) inc.push('home insurance');
+     var missing=[];
+     if(!hasTax) missing.push('property tax');
+     if(!hasIns) missing.push('home insurance');
+     var txt='Includes '+listWords(inc)+'.';
+     if(missing.length) txt+=' <b>It does not include '+listWords(missing)+'</b>, which you have not filled in.';
+     $('hnote').innerHTML=txt;
+   }
+   $('fullCost').textContent=money(pi);
+ }
+
+ /* "a, b and c" without a stray comma, so the note reads like a sentence */
+ function listWords(a){
+   if(a.length===1) return a[0];
+   if(a.length===2) return a[0]+' and '+a[1];
+   return a.slice(0,-1).join(', ')+' and '+a[a.length-1];
+ }
+
+ /* Year by year payoff. Walks the loan month by month, exactly the same
+    arithmetic the headline uses, then totals each calendar year. */
+ var sched=[];
+ function buildSchedule(loan,i,n,pi){
+   sched=[];
+   var bal=loan, yr=0, pY=0, iY=0, startBal=loan;
+   for(var m=1;m<=n;m++){
+     var interest = i===0 ? 0 : bal*i;
+     var principal = Math.min(pi-interest, bal);
+     if(principal<0) principal=0;
+     bal = Math.max(0, bal-principal);
+     pY+=principal; iY+=interest;
+     if(m%12===0 || m===n){
+       yr++;
+       sched.push({year:yr,start:startBal,principal:pY,interest:iY,left:bal});
+       startBal=bal; pY=0; iY=0;
+     }
+   }
+   $('schedBody').innerHTML=sched.map(function(r){
+     return '<tr><td>'+r.year+'</td><td>'+money(r.start)+'</td><td>'+money(r.principal)+
+            '</td><td>'+money(r.interest)+'</td><td class="tot">'+money(r.left)+'</td></tr>';
+   }).join('');
+   var tI=0,tP=0;
+   for(var k=0;k<sched.length;k++){ tI+=sched[k].interest; tP+=sched[k].principal; }
+   return {interest:tI,principal:tP};
+ }
+
+ /* The percentage under Down payment is a read-back of what has been typed, not
+    a result, so it keeps up with the keyboard. NOTHING ELSE MOVES until Calculate
+    is pressed -- that is the rule set on calculator 1 and it still holds here. */
+ function updatePct(){
+   var price=num($('price'),0,null,0), down=Math.min(num($('down'),0,null,0),price||Infinity);
+   $('pctHint').textContent = price>0
+     ? "That's "+(Math.round((down/price)*1000)/10)+'% of the price.'
+     : 'Enter a price above.';
+ }
+ ['price','down'].forEach(function(id){
+   $(id).addEventListener('input',updatePct);
+ });
+
+ /* nothing else recalculates as you type: only the button does */
+ $('f').addEventListener('submit',function(e){e.preventDefault();calculate()});
+
+ /* Three views now, same toggle calculator 1 uses. Takes a name rather than a
+    flag, so a fourth would not need this rewritten again. */
+ var VIEWS={
+   chart:{pane:'paneChart',btn:'vChart',title:'What you borrow, and what it costs'},
+   table:{pane:'paneTable',btn:'vTable',title:'The breakdown'},
+   sched:{pane:'paneSched',btn:'vSched',title:'Year by year'}
+ };
+ function setView(name){
+   for(var k in VIEWS){
+     var v=VIEWS[k], on=(k===name);
+     $(v.pane).hidden=!on;
+     $(v.btn).setAttribute('aria-pressed',on?'true':'false');
+   }
+   $('vTitle').textContent=VIEWS[name].title;
+   if(name!=='chart') hideBarTip();
+   if(name==='sched') fitSchedule();
+ }
+
+ /* The schedule is thirty rows and was running far taller than the panel of
+    inputs beside it. Side by side, it is capped to the height of that panel and
+    scrolls inside its own box. Stacked on a phone there is nothing to line up
+    with, so the cap comes off and the page scrolls normally. */
+ function fitSchedule(){
+   var box=document.querySelector('.tablebox'), panel=$('f');
+   if(!box||!panel) return;
+   var sideBySide=window.matchMedia('(min-width:861px)').matches;
+   if(!sideBySide){
+     /* Stacked on a phone there is no panel to line up with, but the box still
+        needs a height of its own -- without one it cannot scroll, and a header
+        that never scrolls cannot stick. Roughly ten years at a time. */
+     box.style.maxHeight='60vh';
+     box.style.overflowY='auto';
+     return;
+   }
+   /* Measure from the top of the results card, not the inner block, and leave the
+      card's own bottom padding out of the box -- otherwise the column finishes
+      taller than the panel by exactly that padding. */
+   var res=document.querySelector('.res'), rs=getComputedStyle(res);
+   var head=box.getBoundingClientRect().top-res.getBoundingClientRect().top;
+   var padB=parseFloat(rs.paddingBottom)||0;
+   var room=Math.max(160,Math.round(panel.getBoundingClientRect().height-head-padB));
+   box.style.maxHeight=room+'px';
+   box.style.overflowY='auto';
+ }
+ window.addEventListener('resize',function(){ if(!$('paneSched').hidden) fitSchedule(); });
+ $('vChart').addEventListener('click',function(){setView('chart')});
+ $('vTable').addEventListener('click',function(){setView('table')});
+ $('vSched').addEventListener('click',function(){setView('sched')});
+
+ /* Pointing at the bar shows what that part is worth. Same feel as calculator 1:
+    hover only, clears when the pointer leaves, and NOTHING here is clickable or
+    focusable -- no tabindex, no click handler, so no ring can ever appear on a
+    mouse interaction. The bar is decoration you can interrogate, not a control. */
+ var barParts=[];
+ /* The chart is a donut, drawn as two stroked arcs of one circle. Inline SVG in
+    plain JavaScript, no library -- the page fetches nothing, same as calculator 1.
+    Colours are the site's own: --gold-d for what you borrow, the lighter gold
+    used across the calculators for the interest. */
+ var DONUT={cx:100,cy:100,r:70,sw:34};
+ function drawDonut(){
+   var C=2*Math.PI*DONUT.r, svg=$('donut'), off=0, out='';
+   var colours=['#7C5A22','#D2B27A'];
+   for(var i=0;i<barParts.length;i++){
+     var pct=barParts[i].pct;
+     if(pct>0){
+       out+='<circle class="dseg" data-i="'+i+'" cx="'+DONUT.cx+'" cy="'+DONUT.cy+'" r="'+DONUT.r+'"'+
+            ' fill="none" stroke="'+colours[i]+'" stroke-width="'+DONUT.sw+'"'+
+            ' stroke-dasharray="'+(C*pct/100).toFixed(2)+' '+C.toFixed(2)+'"'+
+            ' stroke-dashoffset="'+(-C*off/100).toFixed(2)+'"></circle>';
+     }
+     off+=pct;
+   }
+   if(!out) out='<circle cx="100" cy="100" r="70" fill="none" stroke="#E8DFCF" stroke-width="34"></circle>';
+   svg.innerHTML='<title id="donutTitle">What you borrow, against the interest you would pay</title>'+
+                 '<g transform="rotate(-90 100 100)">'+out+'</g>';
+ }
+ function hideBarTip(){ var t=$('btip'); if(t) t.style.opacity='0'; setBarDim(-1); }
+ function setBarDim(active){
+   var seg=$('donut').querySelectorAll('circle.dseg');
+   for(var i=0;i<seg.length;i++){
+     var k=+seg[i].getAttribute('data-i');
+     seg[i].style.opacity=(active<0||k===active)?'':'0.45';
+   }
+ }
+ function showBarTip(idx,clientX,clientY){
+   var part=barParts[idx]; if(!part) return;
+   var tip=$('btip'), wrap=document.querySelector('.donutwrap');
+   tip.innerHTML='<div class="ty">'+part.label+'</div>'+
+     '<div class="tr"><span>Amount</span><b>'+money(part.value)+'</b></div>'+
+     '<div class="tr"><span>Share</span><b>'+part.pct.toFixed(1)+'%</b></div>';
+   tip.style.opacity='1';
+   var wr=wrap.getBoundingClientRect(), tw=tip.offsetWidth, th=tip.offsetHeight;
+   tip.style.left=Math.max(0,Math.min(clientX-wr.left-tw/2,wr.width-tw))+'px';
+   tip.style.top=Math.max(0,clientY-wr.top-th-12)+'px';
+   setBarDim(idx);
+ }
+ (function(){
+   var svg=$('donut');
+   /* Which wedge is under the pointer: distance says whether it is on the ring
+      at all, angle says which one. Nothing here listens for a click. */
+   function idxAt(clientX,clientY){
+     var r=svg.getBoundingClientRect();
+     if(r.width<=0||!barParts.length) return -1;
+     var scale=r.width/200;
+     var dx=(clientX-(r.left+DONUT.cx*scale))/scale;
+     var dy=(clientY-(r.top+DONUT.cy*scale))/scale;
+     var d=Math.sqrt(dx*dx+dy*dy);
+     if(d<DONUT.r-DONUT.sw/2 || d>DONUT.r+DONUT.sw/2) return -1;
+     var ang=Math.atan2(dy,dx)*180/Math.PI+90;
+     if(ang<0) ang+=360;
+     var frac=ang/360*100, acc=0;
+     for(var i=0;i<barParts.length;i++){ acc+=barParts[i].pct; if(frac<=acc) return i; }
+     return barParts.length-1;
+   }
+   function point(x,y){ var i=idxAt(x,y); if(i>=0) showBarTip(i,x,y); else hideBarTip(); }
+   svg.addEventListener('mousemove',function(e){ point(e.clientX,e.clientY) });
+   svg.addEventListener('mouseleave',hideBarTip);
+   /* no hover on a phone, so a touch does the same thing */
+   svg.addEventListener('touchstart',function(e){ if(e.touches[0]) point(e.touches[0].clientX,e.touches[0].clientY) },{passive:true});
+   svg.addEventListener('touchmove',function(e){ if(e.touches[0]) point(e.touches[0].clientX,e.touches[0].clientY) },{passive:true});
+   document.addEventListener('touchstart',function(e){
+     var t=e.target;
+     if(!(t && t.closest && t.closest('.bar'))) hideBarTip();
+   },{passive:true});
+ })();
+
+ /* the question marks: hover on a mouse, tap on a phone, escape or a tap away closes */
+ (function(){
+   var qtip=$('qtip'), qs=[].slice.call(document.querySelectorAll('.qm')), openBtn=null, pinned=false;
+   function place(btn){
+     var host=qtip.offsetParent||qtip.parentElement;
+     var hr=host.getBoundingClientRect(), br=btn.getBoundingClientRect();
+     /* Property tax and home insurance sit in a two-column grid. A 250px tooltip
+        cannot fit inside a ~150px column, so centring it on the button and then
+        clamping it to the panel dragged the insurance tooltip left until it sat
+        under the property tax field. Inside that grid the tooltip is capped to
+        its own column and aligned to it, so each one opens under its own field.
+        Full-width fields are unaffected and still centre on their button. */
+     var cell=btn.closest?btn.closest('.optgrid .fld'):null;
+     var left;
+     qtip.style.left='0px';
+     if(cell){
+       var cr=cell.getBoundingClientRect();
+       qtip.style.maxWidth=Math.max(140,Math.round(cr.width))+'px';
+       left=cr.left-hr.left;
+     } else {
+       qtip.style.maxWidth='250px';
+       left=br.left-hr.left+br.width/2-qtip.offsetWidth/2;
+     }
+     /* NOTE: this clamp used to read hr.clientWidth. hr is a DOMRect and has no
+        clientWidth, so the whole expression was NaN, the assignment was silently
+        ignored, and every tooltip stayed at the panel's left edge. It looked
+        right only because every field used to be full width. Read the width off
+        the element. */
+     var tw=qtip.offsetWidth;
+     var maxLeft=host.clientWidth-tw-6;
+     qtip.style.left=Math.max(6,Math.min(left,maxLeft))+'px';
+     qtip.style.top=(br.bottom-hr.top+9)+'px';
+   }
+   function open(btn,pin){
+     var src=document.getElementById(btn.getAttribute('aria-describedby'));
+     qtip.textContent=src?src.textContent:'';
+     qtip.classList.add('on');
+     place(btn);
+     if(openBtn&&openBtn!==btn) openBtn.setAttribute('aria-expanded','false');
+     btn.setAttribute('aria-expanded','true');
+     openBtn=btn; if(pin) pinned=true;
+   }
+   function close(){
+     qtip.classList.remove('on'); pinned=false;
+     if(openBtn){ openBtn.setAttribute('aria-expanded','false'); openBtn=null; }
+   }
+   qs.forEach(function(btn){
+     btn.addEventListener('mouseenter',function(){ if(!pinned) open(btn,false) });
+     btn.addEventListener('mouseleave',function(){ if(!pinned) close() });
+     btn.addEventListener('focus',function(){ open(btn,false) });
+     btn.addEventListener('blur',function(){ if(!pinned) close() });
+     btn.addEventListener('click',function(e){
+       e.preventDefault(); e.stopPropagation();
+       if(pinned&&openBtn===btn){ close(); } else { open(btn,true); }
+     });
+   });
+   document.addEventListener('click',function(e){
+     if(!(e.target&&e.target.closest&&e.target.closest('.qm'))) close();
+   });
+   document.addEventListener('touchstart',function(e){
+     if(!(e.target&&e.target.closest&&e.target.closest('.qm'))) close();
+   },{passive:true});
+   document.addEventListener('keydown',function(e){ if(e.key==='Escape') close() });
+   window.addEventListener('resize',function(){ if(openBtn) place(openBtn) });
+ })();
+
+ var rz; window.addEventListener('resize',function(){ clearTimeout(rz); rz=setTimeout(fitBig,150); });
+
+ /* Work it out once on load from the defaults, so the page never shows an empty
+    result. After this it only recalculates when Calculate is pressed. */
+ calculate();
+})();
+</script>
+</body></html>
