@@ -84,14 +84,13 @@
 /* the chart responds to pointing but nothing on it is clickable, so it keeps the
    normal arrow. A hand would promise a click that does nothing. */
 .chartbox rect.plot{cursor:default}
-/* Clicking the chart must do nothing and show nothing. The overlay is focusable
-   so the arrow keys can step through the years, and a plain :focus would draw
-   the browser's default ring — a thick black box round the whole chart, because
-   the overlay spans all of it. :focus-visible is the selector that tells a
-   keyboard apart from a mouse: the ring is kept for the keyboard, where it is
-   the only way to see where you are, and never appears for a click or a tap. */
-.chartbox rect.plot:focus{outline:none}
-.chartbox rect.plot:focus-visible{outline:2px solid var(--gold-d);outline-offset:2px}
+/* Clicking must draw nothing. The overlay is focusable so the arrow keys can
+   step through the years, and a click focuses it too — drawing the browser's
+   default ring, which spans the whole chart because the overlay does.
+   :focus:not(:focus-visible) is exactly and only the non-keyboard case, so this
+   removes the ring on a click and a tap and changes nothing else: keyboard
+   focus is untouched and still shows whatever the browser draws today. */
+.chartbox rect.plot:focus:not(:focus-visible){outline:none}
 .chartbox rect.seg{transition:opacity .13s ease}
 #tip{position:absolute;pointer-events:none;opacity:0;transition:opacity .12s;background:var(--ink);color:#fff;border-radius:9px;padding:10px 13px;font-size:13px;line-height:1.5;box-shadow:0 10px 26px rgba(0,0,0,.25);z-index:5;white-space:nowrap}
 #tip .ty{font-weight:700;font-size:13.5px;margin-bottom:5px;color:#fff}
@@ -344,12 +343,6 @@ document.querySelectorAll(".reveal").forEach(function(el){io.observe(el);});</sc
    }
  }
  var sel=-1, plotWired=false;
- /* Fallback for browsers without :focus-visible — Tab means keyboard, a mouse
-    or finger means not. Only read when the check above throws. */
- var lastInputWasKeyboard=false;
- document.addEventListener('keydown',function(e){ if(e.key==='Tab') lastInputWasKeyboard=true; },true);
- document.addEventListener('mousedown',function(){ lastInputWasKeyboard=false; },true);
- document.addEventListener('touchstart',function(){ lastInputWasKeyboard=false; },{capture:true,passive:true});
  function clearTip(){ $('tip').style.opacity='0'; dimOthers(null); sel=-1; }
  function showYear(idx){
    var r=rows[idx]; if(!r) return;
@@ -380,17 +373,13 @@ document.querySelectorAll(".reveal").forEach(function(el){io.observe(el);});</sc
    plot.addEventListener('mouseleave',clearTip);
    plot.addEventListener('touchstart',function(e){ if(e.touches[0]) showYear(idxAt(e.touches[0].clientX)) },{passive:true});
    plot.addEventListener('touchmove',function(e){ if(e.touches[0]) showYear(idxAt(e.touches[0].clientX)) },{passive:true});
-   /* Only a keyboard focus highlights a year. A click focuses the overlay too,
-      and that used to light a bar up and leave it there — which is the "locked"
-      highlight, alongside the black ring. Clicking now does nothing at all;
-      hover alone highlights, and mouseleave clears it. Phones are unaffected:
-      taps run through the touchstart/touchmove handlers above, not through
-      focus. Older browsers without :focus-visible fall back to watching what the
-      last input was, so a click never highlights there either. */
+   /* A click focuses the overlay too, and that used to light a bar and leave it
+      lit — the "locked" highlight. Keyboard focus behaves exactly as before;
+      only the click case is skipped. Taps are unaffected: they run through the
+      touchstart/touchmove handlers above, never through focus. */
    plot.addEventListener('focus',function(){
-     var byKeyboard;
-     try{ byKeyboard=plot.matches(':focus-visible'); }
-     catch(_){ byKeyboard=lastInputWasKeyboard; }
+     var byKeyboard=false;
+     try{ byKeyboard=plot.matches(':focus-visible'); }catch(_){}
      if(byKeyboard) showYear(sel<0?0:sel);
    });
    plot.addEventListener('blur',clearTip);
