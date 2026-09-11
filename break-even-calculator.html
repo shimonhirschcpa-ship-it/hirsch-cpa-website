@@ -1,0 +1,550 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Break Even Calculator · Hirsch CPA</title><meta name="description" content="Work out how much you need to sell before the business covers what it costs to run."><link rel="icon" href="assets/logo-emblem.png">
+<!-- Social share / link preview (Open Graph + Twitter Card) -->
+<link rel="canonical" href="https://hirsch-cpa-website.vercel.app/break-even-calculator.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Hirsch &amp; Co. Accounting LLC">
+<meta property="og:title" content="Break Even Calculator • Hirsch CPA">
+<meta property="og:description" content="Work out how much you need to sell before the business covers what it costs to run.">
+<meta property="og:url" content="https://hirsch-cpa-website.vercel.app/break-even-calculator.html">
+<meta property="og:image" content="https://hirsch-cpa-website.vercel.app/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Hirsch &amp; Co. Accounting LLC • Certified Public Accountants">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Break Even Calculator • Hirsch CPA">
+<meta name="twitter:description" content="Work out how much you need to sell before the business covers what it costs to run.">
+<meta name="twitter:image" content="https://hirsch-cpa-website.vercel.app/assets/og-image.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+/* ===== calculator ===== */
+.calc{display:grid;grid-template-columns:.8fr 1.2fr;gap:40px;align-items:start;max-width:1000px;margin:0 auto}
+.calc>*{min-width:0}
+.cpanel{background:var(--cream);border:1px solid var(--line);border-radius:16px;padding:26px}
+.fld{margin-bottom:18px}
+.fld label,.fld .lb{display:block;font-size:14.5px;font-weight:600;color:var(--ink);margin-bottom:7px}
+/* label plus a small question mark that explains the field */
+.lrow{display:flex;align-items:center;gap:7px;margin-bottom:7px}
+.lrow label,.lrow .lb{margin-bottom:0}
+.qm{position:relative;width:17px;height:17px;flex:none;padding:0;border:1.2px solid var(--muted);border-radius:50%;background:none;color:var(--muted);font-family:inherit;font-size:11px;font-weight:700;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:color .15s,border-color .15s}
+.qm:hover,.qm[aria-expanded="true"]{border-color:var(--gold-d);color:var(--gold-d)}
+.qm:focus-visible{outline:2px solid var(--gold-d);outline-offset:2px}
+.qm::before{content:"";position:absolute;left:-9px;right:-9px;top:-9px;bottom:-9px}
+.sr{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+#qtip{position:absolute;z-index:20;max-width:250px;background:var(--ink);color:#fff;border-radius:9px;padding:10px 13px;font-size:13px;line-height:1.5;box-shadow:0 10px 26px rgba(0,0,0,.25);opacity:0;visibility:hidden;transition:opacity .12s;pointer-events:none}
+#qtip.on{opacity:1;visibility:visible}
+.inp{position:relative;display:flex;align-items:center}
+.inp .pre,.inp .suf{position:absolute;font-size:16px;font-weight:600;color:var(--muted);pointer-events:none}
+.inp .pre{left:14px}.inp .suf{right:14px}
+.inp input{width:100%;padding:14px 15px;border:1px solid var(--line);border-radius:9px;font-family:inherit;font-size:17px;font-weight:600;background:#fff;color:var(--ink);-moz-appearance:textfield}
+.inp input::-webkit-outer-spin-button,.inp input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.inp.money input{padding-left:29px}
+.inp.pct input{padding-right:33px}
+.inp input:focus{outline:2px solid var(--gold-d);outline-offset:1px;border-color:var(--gold-d)}
+.pcthint{font-size:13px;color:var(--muted);margin-top:6px}
+/* term choice: plain radio buttons, small and quiet */
+.freq{display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin-top:2px}
+.freq label{display:inline-flex;align-items:center;gap:8px;margin:0;font-size:13.5px;font-weight:500;color:var(--body);cursor:pointer;line-height:1.4;padding:8px 0}
+.freq input{appearance:none;-webkit-appearance:none;position:relative;width:15px;height:15px;margin:0;flex:none;border:1.5px solid var(--muted);border-radius:50%;background:#fff;cursor:pointer}
+.freq input:checked{border-color:var(--gold-d)}
+.freq input:checked::after{content:"";position:absolute;left:50%;top:50%;width:7px;height:7px;margin:-3.5px 0 0 -3.5px;border-radius:50%;background:var(--gold-d)}
+.freq input:focus-visible{outline:2px solid var(--gold-d);outline-offset:2px}
+.freq label:hover{color:var(--ink)}
+/* 24px of air above the button, matching calculator 1. There the button follows
+   a .fld whose 18px bottom margin plus 6px here makes 24. The fields in the
+   side-by-side grid have their bottom margin removed, so without this the gap
+   collapsed to 6px and the button sat on top of the insurance field. */
+.gobtn{width:100%;justify-content:center;margin-top:24px;font-size:16px;padding:15px 24px;min-height:50px}
+
+.res{background:#fff;border:1px solid var(--line);border-radius:16px;padding:26px}
+/* one figure, no box: a small gold line above a large serif number */
+.hlead{font-size:14.5px;color:var(--gold-d);font-weight:500;margin-bottom:4px}
+.hbig{font-family:'Fraunces',Georgia,serif;font-size:58px;font-weight:600;color:var(--ink);line-height:1.02;letter-spacing:-.02em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.hnote{font-size:13.5px;color:var(--muted);line-height:1.6;margin-top:10px}
+/* View header, identical to calculator 1: centred title, icon toggle on the
+   right. Two views here, the same as there. */
+.vhead{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;margin:26px 0 12px}
+.vtitle{grid-column:2;text-align:center;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-d);font-weight:700}
+.vtabs{grid-column:3;justify-self:end;display:flex;align-items:center;flex:none}
+.vtabs button{background:none;border:0;padding:0 14px;margin:0;cursor:pointer;color:var(--gold-d);display:flex;align-items:center;justify-content:center;min-height:44px;transition:color .15s}
+.vtabs button+button{border-left:1px solid var(--line)}
+.vtabs button:hover{color:var(--ink)}
+.vtabs button[aria-pressed="true"]{color:var(--ink)}
+.vtabs button:focus-visible{outline:2px solid var(--gold-d);outline-offset:2px;border-radius:6px}
+.vtabs svg{width:21px;height:21px;display:block}
+
+
+
+/* Nothing in the chart is clickable or focusable, deliberately. Pointing at it
+   is the whole interaction, exactly as on calculator 1. */
+
+#btip{position:absolute;pointer-events:none;opacity:0;transition:opacity .12s;background:var(--ink);color:#fff;border-radius:9px;padding:10px 13px;font-size:13px;line-height:1.5;box-shadow:0 10px 26px rgba(0,0,0,.25);z-index:5;white-space:nowrap}
+#btip .ty{font-weight:700;font-size:13.5px;margin-bottom:5px;color:#fff}
+#btip .tr{display:flex;justify-content:space-between;gap:16px}
+#btip .tr span{color:#D9D0C2}
+#btip .tr b{font-variant-numeric:tabular-nums}
+/* Year-by-year payoff schedule, styled exactly like calculator 1's table. */
+.tablebox{overflow:auto;-webkit-overflow-scrolling:touch}
+table.yr{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+/* The header row stays put while the years scroll under it. Sticky against the
+   box, not the page, so it pins vertically and still travels sideways with the
+   columns when the table is scrolled across on a phone. The underline is an
+   inset shadow rather than a border: a border on a sticky cell scrolls away with
+   the row in some browsers, the shadow does not. The white background is the
+   card's own, so rows cannot show through as they pass beneath. */
+table.yr th{text-align:right;font-weight:700;color:var(--gold-d);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:3px 0 9px;white-space:nowrap;position:sticky;top:0;z-index:2;background:#fff;box-shadow:inset 0 -1px 0 var(--line)}
+table.yr th:first-child,table.yr td:first-child{text-align:left}
+table.yr td{text-align:right;padding:8px 0;border-bottom:1px solid var(--line);color:var(--body);white-space:nowrap}
+table.yr th+th,table.yr td+td{padding-left:14px}
+table.yr tr:last-child td{border-bottom:none}
+table.yr td.tot{font-weight:700;color:var(--ink)}
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:11px}
+.legend div{display:flex;align-items:center;gap:7px;font-size:13.5px;color:var(--body)}
+.legend em{width:12px;height:12px;border-radius:3px;flex:none;font-style:normal}
+
+.brk .row{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}
+.brk .row:last-child{border-bottom:none}
+.brk .k{font-size:14.5px;color:var(--body)}
+.brk .v{font-size:16px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.brk .row.tot .k{font-weight:700;color:var(--ink)}
+.brk .row.tot .v{color:var(--gold-d);font-size:18px}
+.opt{margin-top:20px;padding-top:16px;border-top:1px solid var(--line)}
+.opt .oh{font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.opt .os{font-size:13px;color:var(--muted);margin-bottom:14px}
+
+
+
+
+
+
+.disc{background:var(--cream);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:12px;padding:16px 18px;font-size:13.5px;line-height:1.65;color:var(--ink);max-width:1000px;margin:30px auto 0}
+@media(max-width:860px){.calc{grid-template-columns:1fr;gap:24px}.res,.cpanel{padding:20px}.hbig{font-size:42px}
+.vhead{grid-template-columns:1fr;gap:6px}.vtitle{grid-column:1}.vtabs{grid-column:1;justify-self:end}}
+
+/* chart frame, same shape calculator 1 uses */
+.chartwrap{position:relative}
+.chartbox{width:100%}
+.chartbox svg{display:block;width:100%;height:auto}
+/* Nothing in the chart is clickable or focusable. Pointing at it is the whole
+   interaction, exactly as on the other calculators. */
+.chartbox rect.plot{cursor:default}
+#tip{position:absolute;pointer-events:none;opacity:0;transition:opacity .12s;background:var(--ink);
+  color:#fff;border-radius:9px;padding:10px 13px;font-size:13px;line-height:1.5;
+  box-shadow:0 10px 26px rgba(0,0,0,.25);z-index:5;white-space:nowrap}
+#tip .ty{font-weight:700;font-size:13.5px;margin-bottom:5px;color:#fff}
+#tip .tr{display:flex;justify-content:space-between;gap:16px}
+#tip .tr span{color:#D9D0C2}
+#tip .tr b{font-variant-numeric:tabular-nums}
+.legend{display:flex;gap:22px;justify-content:center;margin-top:14px;font-size:13px;color:var(--body)}
+.legend div{display:inline-flex;align-items:center;gap:7px}
+.legend em{width:11px;height:11px;border-radius:3px;display:block}
+.saveline{margin-top:24px;background:var(--cream);border:1px solid var(--line);border-radius:10px;
+  padding:14px 16px;display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.saveline .k{font-size:14.5px;font-weight:600;color:var(--ink)}
+.saveline .v{font-size:20px;font-weight:700;color:var(--gold-d);font-variant-numeric:tabular-nums}
+</style><script>document.documentElement.className+=" js-motion";</script></head><body><header><div class="wrap nav">
+<a href="index.html#top" class="brand"><img src="assets/logo-emblem.png" alt="Hirsch CPA"><div class="bt"><div class="nmrow"><span class="h">HIRSCH</span> <span class="c">CPA</span></div><div class="subttl">Certified Public Accountants</div></div></a>
+<nav class="nl">
+ <div class="drop"><a class="l" href="index.html#services">Services <span class="cv">&#9662;</span></a><div class="dmenu"><a href="services/tax-preparation.html">Tax Preparation</a><a href="services/bookkeeping.html">Bookkeeping</a><a href="services/payroll.html">Payroll</a><a href="services/sales-tax.html">Sales Tax</a><a href="services/audit.html">Audit</a><a href="services/advisory.html">Advisory</a></div></div>
+ <div class="drop"><a class="l" href="track-refund.html">Resources <span class="cv">&#9662;</span></a><div class="dmenu"><a href="track-refund.html">Track Your Refund</a><a href="tax-due-dates.html">Due Dates</a><a href="calculators.html">Financial Calculators</a></div></div>
+ <a class="l" href="index.html#about">About</a><a class="l" href="contact.html">Contact</a>
+ <a class="btn login" href="https://hirsch-portal.vercel.app" target="_blank" rel="noopener"><span class="dot"></span><span class="clw">Client </span>Login</a><a class="btn gold" href="contact.html">Book a call</a></nav>
+<button class="burger" aria-label="Menu" onclick="toggleMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+</div></header>
+<div class="mbackdrop" id="mbackdrop" onclick="toggleMenu()"></div><div class="mmenu" id="mmenu">
+<a class="mlogin" href="https://hirsch-portal.vercel.app" target="_blank" rel="noopener"><span class="dot"></span>Client Login</a>
+<button class="macc" onclick="accToggle(this)">Services <span class="av">&#9662;</span></button><div class="msub"><a href="services/tax-preparation.html">Tax Preparation</a><a href="services/bookkeeping.html">Bookkeeping</a><a href="services/payroll.html">Payroll</a><a href="services/sales-tax.html">Sales Tax</a><a href="services/audit.html">Audit</a><a href="services/advisory.html">Advisory</a></div>
+<button class="macc" onclick="accToggle(this)">Resources <span class="av">&#9662;</span></button><div class="msub"><a href="track-refund.html">Track Your Refund</a><a href="tax-due-dates.html">Due Dates</a><a href="calculators.html">Financial Calculators</a></div>
+<a class="mbook" href="contact.html">Book a call</a></div>
+<section class="phero"><img class="wm" src="assets/logo-emblem.png" alt=""><div class="wrap"><h1>Break Even Calculator</h1><p>Work out how much you need to sell before the business covers what it costs to run. Put in what you pay out every month, what you charge, and what each sale costs you.</p></div></section>
+
+<section class="detail"><div class="wrap">
+<div class="calc">
+
+ <form class="cpanel" id="f" novalidate style="position:relative">
+  <div class="fld">
+   <div class="lrow"><label for="fixed">Fixed costs a month</label><button type="button" class="qm" aria-label="Explain Fixed costs a month" aria-expanded="false" aria-describedby="q-fixed">?</button><span id="q-fixed" class="sr">What you pay every month whether you sell anything or not. Rent, wages, insurance, software, loan payments.</span></div>
+   <div class="inp money"><span class="pre">$</span><input id="fixed" type="text" inputmode="decimal" autocomplete="off" value="5,000"></div>
+  </div>
+
+  <div class="fld">
+   <div class="lrow"><label for="price">Price of one sale</label><button type="button" class="qm" aria-label="Explain Price of one sale" aria-expanded="false" aria-describedby="q-price">?</button><span id="q-price" class="sr">What you charge for one of whatever you sell. If your prices vary, use a typical one, or your average.</span></div>
+   <div class="inp money"><span class="pre">$</span><input id="price" type="text" inputmode="decimal" autocomplete="off" value="100"></div>
+  </div>
+
+  <div class="fld">
+   <div class="lrow"><label for="cost">What that sale costs you</label><button type="button" class="qm" aria-label="Explain what that sale costs you" aria-expanded="false" aria-describedby="q-cost">?</button><span id="q-cost" class="sr">Only what goes up when you make one more sale. Stock, materials, the hours you pay someone for that job, card fees. Not rent or salaries you pay anyway.</span></div>
+   <div class="inp money"><span class="pre">$</span><input id="cost" type="text" inputmode="decimal" autocomplete="off" value="40"></div>
+   <div class="pcthint" id="marginHint">You keep $60 of each sale. That's a 60% margin.</div>
+  </div>
+
+  <div class="fld">
+   <div class="lrow"><label for="expect">Sales you make in a month</label><button type="button" class="qm" aria-label="Explain sales you make in a month" aria-expanded="false" aria-describedby="q-expect">?</button><span id="q-expect" class="sr">Optional. Put in what you sell now, or what you think you will, and it shows what that leaves you after costs.</span></div>
+   <div class="inp"><input id="expect" type="text" inputmode="decimal" autocomplete="off" value="120"></div>
+  </div>
+
+  <button type="submit" class="btn gold gobtn" id="go">Calculate</button>
+  <div id="qtip" role="tooltip"></div>
+ </form>
+
+ <div class="res">
+  <div id="out" aria-live="polite">
+   <div class="hlead" id="hlead">To cover your costs you need about</div>
+   <div class="hbig" id="total">84 sales</div>
+   <p class="hnote" id="hnote">a month, which is $8,400 of revenue at your price. Every sale after that is profit.</p>
+
+   <div class="vhead">
+    <div class="vtitle" id="vTitle">Where costs and revenue cross</div>
+    <div class="vtabs" role="group" aria-label="Choose how to see the results">
+     <button type="button" id="vChart" aria-pressed="true" aria-label="Show the chart" title="Chart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V5.5M4 20h16"/><path d="M7 16.5 12 12l4 2.5 4-6.5"/></svg></button>
+     <button type="button" id="vTable" aria-pressed="false" aria-label="Show the table" title="Table"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><path d="M3 9.75h18M9.5 9.75V19.5"/></svg></button>
+    </div>
+   </div>
+
+   <div id="paneChart">
+    <div class="chartwrap">
+     <div class="chartbox"><svg id="chart" viewBox="0 0 520 250" role="img" aria-labelledby="chartTitle"><title id="chartTitle">Revenue against total costs, as sales rise</title></svg></div>
+     <div id="tip" role="status"></div>
+    </div>
+    <div class="legend">
+     <div><em style="background:#7C5A22"></em>Money coming in</div>
+     <div><em style="background:#8B7E6C"></em>What it all costs you</div>
+    </div>
+   </div>
+
+   <div id="paneTable" hidden>
+    <div class="tablebox">
+     <table class="yr">
+      <thead><tr>
+       <th scope="col">Sales a month</th><th scope="col">Money in</th>
+       <th scope="col">Total costs</th><th scope="col">Profit</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+     </table>
+    </div>
+   </div>
+
+   <div class="saveline" id="expectLine"><span class="k" id="expectK">At 120 sales a month you would make</span><span class="v" id="expectV">$2,200</span></div>
+  </div>
+ </div>
+
+</div>
+
+<div class="disc"><b>This is an estimate, not advice.</b> It assumes every sale is much the same and that your fixed costs stay flat as you grow, which is rarely true for long. It works in the money you take in and pay out, not in tax, and it does not tell you whether you can afford the wait. Talk to us before acting on it.</div>
+
+</div></section>
+<footer><div class="wrap"><div class="foot">
+<div><div class="nm">HIRSCH <span>CPA</span></div><div class="sb">Hirsch &amp; Co. Accounting LLC · Certified Public Accountants</div></div>
+<div class="fcol"><h5>Services</h5><a href="services/tax-preparation.html">Tax Preparation</a><a href="services/bookkeeping.html">Bookkeeping</a><a href="services/payroll.html">Payroll</a><a href="services/sales-tax.html">Sales Tax</a><a href="services/audit.html">Audit</a><a href="services/advisory.html">Advisory</a></div>
+<div class="fcol"><h5>Resources</h5><a href="https://hirsch-portal.vercel.app" target="_blank" rel="noopener">Client Login</a><a href="track-refund.html">Track Your Refund</a><a href="tax-due-dates.html">Due Dates</a><a href="index.html#about">About</a><a href="contact.html">Contact</a></div>
+<div class="fcol"><h5>Get in touch</h5><a href="mailto:info@hirsch.cpa">info@hirsch.cpa</a><a href="tel:+13474862780">(347) 486-2780</a><a href="contact.html">Book a call</a></div>
+</div><div class="copy"><span>© 2026 Hirsch &amp; Co. Accounting LLC. All rights reserved.</span><span><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></span></div></div></footer><script>function accToggle(b){var s=b.nextElementSibling;b.classList.toggle("open");if(s)s.classList.toggle("open");}
+function toggleMenu(){var m=document.getElementById("mmenu"),b=document.getElementById("mbackdrop");var o=m.classList.toggle("open");if(b)b.classList.toggle("open",o);document.body.style.overflow=o?"hidden":"";}
+document.querySelectorAll("#mmenu a").forEach(function(a){a.addEventListener("click",function(){var m=document.getElementById("mmenu"),b=document.getElementById("mbackdrop");m.classList.remove("open");if(b)b.classList.remove("open");document.body.style.overflow="";});});
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}})},{threshold:0,rootMargin:"0px 0px 12% 0px"});
+document.querySelectorAll(".reveal").forEach(function(el){io.observe(el);});</script>
+<script>
+(function(){
+ var $=function(id){return document.getElementById(id)};
+
+ var money=function(n){
+   if(!isFinite(n)) return '$0';
+   var sign = n<0 ? '-' : '';
+   return sign+'$'+Math.round(Math.abs(n)).toLocaleString('en-US');
+ };
+ var count=function(n){ return Math.round(n).toLocaleString('en-US'); };
+
+ function clean(v){ return String(v).replace(/[^0-9.]/g,''); }
+ function num(el,dflt){
+   var v=parseFloat(clean(el.value));
+   if(!isFinite(v)||v<0) v=dflt;
+   return v;
+ }
+ function blank(el){ return clean(el.value)===''; }
+ function fmtField(el){
+   var raw=clean(el.value); if(raw==='') return;
+   var p=raw.split('.');
+   var whole=p[0].replace(/^0+(?=\d)/,'');
+   var out=Number(whole||0).toLocaleString('en-US');
+   if(p.length>1) out+='.'+p[1].slice(0,2);
+   var atEnd=el.selectionStart===el.value.length;
+   el.value=out;
+   if(atEnd){ try{ el.setSelectionRange(el.value.length,el.value.length); }catch(e){} }
+ }
+
+ /* A read back of what has been typed, so it keeps up with the keyboard.
+    Nothing else moves until Calculate is pressed. */
+ function updateMargin(){
+   var p=num($('price'),0), c=num($('cost'),0), m=p-c;
+   if(p<=0){ $('marginHint').textContent='Enter a price above.'; return; }
+   if(m>0){
+     $('marginHint').textContent='You keep '+money(m)+' of each sale. That’s a '+
+       (Math.round(m/p*1000)/10)+'% margin.';
+   } else if(m===0){
+     $('marginHint').textContent='Each sale only covers its own cost, so nothing is left over.';
+   } else {
+     $('marginHint').textContent='Each sale loses you '+money(-m)+'.';
+   }
+ }
+
+ ['fixed','price','cost','expect'].forEach(function(id){
+   var el=$(id); fmtField(el);
+   el.addEventListener('input',function(){ fmtField(el); updateMargin(); });
+   el.addEventListener('blur',function(){ fmtField(el); });
+ });
+
+ var geo=null, rows=[];
+
+ function calculate(){
+   var fixed=num($('fixed'),0), price=num($('price'),0), cost=num($('cost'),0);
+   var hasExpect=!blank($('expect'));
+   var expect=hasExpect?num($('expect'),0):null;
+   var margin=price-cost;
+
+   var beSales=null, beRev=null;
+   if(margin>0){
+     var exact=fixed/margin;
+     /* Math.ceil of a tiny negative gives -0, which prints as "-0". */
+     beSales=Math.max(0,Math.ceil(exact-1e-9));
+     beRev=beSales*price;
+   }
+
+   if(margin>0 && beSales===0){
+     $('hlead').textContent='You are in profit from';
+     $('total').textContent='your first sale';
+     $('hnote').textContent='You have no fixed costs to cover, so every sale is profit from the start. '+
+       'Check that nothing you pay monthly has been left out.';
+   } else if(margin>0){
+     $('hlead').textContent='To cover your costs you need about';
+     $('total').textContent=count(beSales)+(beSales===1?' sale':' sales');
+     $('hnote').textContent='a month, which is '+money(beRev)+
+       ' of revenue at your price. Every sale after that is profit.';
+   } else if(margin===0 && price>0){
+     $('hlead').textContent='At this price you break even';
+     $('total').textContent='Never';
+     $('hnote').textContent='Each sale brings in exactly what it costs you, so no number of sales '+
+       'covers your fixed costs. The price has to rise or the cost per sale has to fall.';
+   } else if(price<=0){
+     $('hlead').textContent='At this price you break even';
+     $('total').textContent='Never';
+     $('hnote').textContent='Put in what you charge for one sale to see the answer.';
+   } else {
+     $('hlead').textContent='At this price you break even';
+     $('total').textContent='Never';
+     $('hnote').textContent='Each sale loses you '+money(cost-price)+
+       ', so selling more makes things worse, not better. The price has to rise or the cost per sale has to fall.';
+   }
+   fitBig();
+
+   /* the profit line at your own level of sales */
+   if(hasExpect && price>0){
+     var pr=expect*margin-fixed;
+     $('expectLine').hidden=false;
+     $('expectK').textContent='At '+count(expect)+(expect===1?' sale':' sales')+' a month you would '+
+       (pr>=0?'make':'lose');
+     $('expectV').textContent=money(Math.abs(pr));
+     $('expectV').style.color = pr>=0 ? '' : '#8B2F1F';
+   } else {
+     $('expectLine').hidden=true;
+   }
+
+   drawChart(fixed,price,cost,beSales,expect);
+   drawTable(fixed,price,cost,beSales,expect);
+   updateMargin();
+ }
+
+ /* ---------- the chart: revenue against total costs, and where they cross ----------
+    Inline SVG drawn in plain JavaScript. Nothing in it is clickable or focusable:
+    no tabindex, no click handler, so no ring can ever appear on a mouse. */
+ function drawChart(fixed,price,cost,beSales,expect){
+   var W=520,H=250,padL=54,padR=16,padT=16,padB=34;
+   var cw=W-padL-padR, ch=H-padT-padB;
+
+   var anchor = beSales || (expect||0) || 10;
+   var xMax = Math.max(anchor*2, (expect||0)*1.25, 10);
+   var yMax = Math.max(fixed+cost*xMax, price*xMax, fixed*1.4, 1);
+
+   var X=function(n){ return padL + (n/xMax)*cw; };
+   var Y=function(v){ return padT + ch - (v/yMax)*ch; };
+   geo={padL:padL,padT:padT,cw:cw,ch:ch,xMax:xMax,yMax:yMax,fixed:fixed,price:price,cost:cost};
+
+   var s='';
+   /* the profit wedge, only where revenue is above total cost */
+   if(price>cost && beSales!==null && beSales<xMax){
+     s+='<polygon points="'+X(beSales)+','+Y(price*beSales)+' '+X(xMax)+','+Y(price*xMax)+' '+
+        X(xMax)+','+Y(fixed+cost*xMax)+'" fill="#9C7430" opacity="0.10"/>';
+   }
+   /* grid and axis */
+   for(var g=0;g<=3;g++){
+     var gy=padT+ch-(g/3)*ch;
+     s+='<line x1="'+padL+'" y1="'+gy.toFixed(1)+'" x2="'+(padL+cw)+'" y2="'+gy.toFixed(1)+
+        '" stroke="#E8DFCF" stroke-width="1"/>';
+     s+='<text x="'+(padL-8)+'" y="'+(gy+4).toFixed(1)+'" text-anchor="end" font-family="Inter,sans-serif" '+
+        'font-size="10" fill="#8B7E6C">'+shortMoney(yMax*g/3)+'</text>';
+   }
+   for(var t=0;t<=4;t++){
+     var n=xMax*t/4;
+     s+='<text x="'+X(n).toFixed(1)+'" y="'+(H-10)+'" text-anchor="middle" font-family="Inter,sans-serif" '+
+        'font-size="10" fill="#8B7E6C">'+count(n)+'</text>';
+   }
+   /* total costs: starts at your fixed costs and climbs with each sale */
+   s+='<line x1="'+X(0)+'" y1="'+Y(fixed).toFixed(1)+'" x2="'+X(xMax)+'" y2="'+Y(fixed+cost*xMax).toFixed(1)+
+      '" stroke="#8B7E6C" stroke-width="2.2" stroke-linecap="round"/>';
+   /* revenue: from nothing, climbing with each sale */
+   s+='<line x1="'+X(0)+'" y1="'+Y(0).toFixed(1)+'" x2="'+X(xMax)+'" y2="'+Y(price*xMax).toFixed(1)+
+      '" stroke="#7C5A22" stroke-width="2.4" stroke-linecap="round"/>';
+   /* the crossing point */
+   if(beSales!==null && beSales<=xMax){
+     var bx=X(beSales), by=Y(price*beSales);
+     s+='<line x1="'+bx.toFixed(1)+'" y1="'+(padT+ch)+'" x2="'+bx.toFixed(1)+'" y2="'+by.toFixed(1)+
+        '" stroke="#9C7430" stroke-width="1" stroke-dasharray="3 3"/>';
+     s+='<circle cx="'+bx.toFixed(1)+'" cy="'+by.toFixed(1)+'" r="4.5" fill="#FBF8F2" stroke="#7C5A22" stroke-width="2"/>';
+   }
+   /* one transparent overlay does the pointing. No tabindex on purpose. */
+   s+='<rect class="plot" x="'+padL+'" y="'+padT+'" width="'+cw+'" height="'+ch+'" fill="transparent"/>';
+
+   var el=$('chart');
+   el.innerHTML='<title id="chartTitle">Revenue against total costs, as sales rise</title>'+s;
+   var tp=$('tip'); if(tp) tp.style.opacity='0';
+   wirePlot();
+ }
+
+ var shortMoney=function(n){
+   n=Math.round(n);
+   if(n>=1e9) return '$'+(n/1e9).toFixed(1)+'B';
+   if(n>=1e6) return '$'+(n/1e6).toFixed(1)+'M';
+   if(n>=1e3) return '$'+Math.round(n/1e3)+'K';
+   return '$'+n;
+ };
+
+ var plotWired=false;
+ function clearTip(){ $('tip').style.opacity='0'; }
+ function showAt(n){
+   if(!geo) return;
+   n=Math.max(0,Math.min(geo.xMax,n));
+   var whole=Math.round(n);
+   var rev=whole*geo.price, tot=geo.fixed+geo.cost*whole, pr=rev-tot;
+   var tip=$('tip'), wrap=document.querySelector('.chartwrap'), svg=$('chart');
+   tip.innerHTML='<div class="ty">'+count(whole)+(whole===1?' sale':' sales')+' a month</div>'+
+     '<div class="tr"><span>Money in</span><b>'+money(rev)+'</b></div>'+
+     '<div class="tr"><span>Total costs</span><b>'+money(tot)+'</b></div>'+
+     '<div class="tr"><span>'+(pr>=0?'Profit':'Loss')+'</span><b>'+money(Math.abs(pr))+'</b></div>';
+   tip.style.opacity='1';
+   var sr=svg.getBoundingClientRect(), wr=wrap.getBoundingClientRect();
+   var scale=sr.width/520;
+   var cx=sr.left+(geo.padL+(whole/geo.xMax)*geo.cw)*scale;
+   var tw=tip.offsetWidth;
+   tip.style.left=Math.max(4,Math.min(cx-wr.left-tw/2,wr.clientWidth-tw-4))+'px';
+   tip.style.top='0px';
+ }
+ function wirePlot(){
+   var plot=$('chart').querySelector('rect.plot'); if(!plot) return;
+   function nAt(clientX){
+     var r=plot.getBoundingClientRect();
+     if(r.width<=0) return 0;
+     return ((clientX-r.left)/r.width)*geo.xMax;
+   }
+   plot.addEventListener('mousemove',function(e){ showAt(nAt(e.clientX)); });
+   plot.addEventListener('mouseleave',clearTip);
+   plot.addEventListener('touchstart',function(e){ if(e.touches[0]) showAt(nAt(e.touches[0].clientX)); },{passive:true});
+   plot.addEventListener('touchmove',function(e){ if(e.touches[0]) showAt(nAt(e.touches[0].clientX)); },{passive:true});
+   if(!plotWired){
+     plotWired=true;
+     document.querySelector('.chartwrap').addEventListener('mouseleave',clearTip);
+     document.addEventListener('touchstart',function(e){
+       var t=e.target;
+       if(!(t && t.closest && t.closest('.chartwrap'))) clearTip();
+     },{passive:true});
+   }
+ }
+
+ /* ---------- the table: what profit looks like either side of break even ---------- */
+ function drawTable(fixed,price,cost,beSales,expect){
+   var anchor = beSales || expect || 10;
+   var step = Math.max(1, Math.round(anchor/4));
+   var start = Math.max(0, (beSales!==null?beSales:anchor) - step*3);
+   rows=[];
+   for(var i=0;i<8;i++){
+     var n=Math.round(start+step*i);
+     rows.push(n);
+   }
+   if(beSales!==null && rows.indexOf(beSales)===-1){ rows.push(beSales); }
+   rows=rows.filter(function(v,i,a){return v>=0 && a.indexOf(v)===i}).sort(function(a,b){return a-b});
+   $('tbody').innerHTML=rows.map(function(n){
+     var rev=n*price, tot=fixed+cost*n, pr=rev-tot;
+     var mark = (beSales!==null && n===beSales) ? ' class="tot"' : '';
+     return '<tr'+mark+'><td>'+count(n)+'</td><td>'+money(rev)+'</td><td>'+money(tot)+
+            '</td><td'+(pr<0?' style="color:#8B2F1F"':'')+'>'+money(pr)+'</td></tr>';
+   }).join('');
+ }
+
+ /* the headline shrinks rather than spilling out of its panel */
+ function fitBig(){
+   var el=$('total'); if(!el) return;
+   el.style.fontSize='';
+   var box=el.parentElement?el.parentElement.clientWidth:0; if(!box) return;
+   var size=parseFloat(getComputedStyle(el).fontSize), guard=0;
+   while(el.scrollWidth>box && size>15 && guard<60){ size-=2; el.style.fontSize=size+'px'; guard++; }
+ }
+ var rz; window.addEventListener('resize',function(){ clearTimeout(rz); rz=setTimeout(fitBig,150); });
+
+ /* nothing recalculates as you type: only the button does */
+ $('f').addEventListener('submit',function(e){ e.preventDefault(); calculate(); });
+
+ function setView(chart){
+   $('paneChart').hidden=!chart; $('paneTable').hidden=chart;
+   $('vChart').setAttribute('aria-pressed',chart?'true':'false');
+   $('vTable').setAttribute('aria-pressed',chart?'false':'true');
+   $('vTitle').textContent=chart?'Where costs and revenue cross':'Profit at different levels';
+   if(!chart) clearTip();
+ }
+ $('vChart').addEventListener('click',function(){ setView(true); });
+ $('vTable').addEventListener('click',function(){ setView(false); });
+
+ /* the question marks: hover on a mouse, tap on a phone, escape or a tap away closes */
+ (function(){
+   var qtip=$('qtip'), qs=[].slice.call(document.querySelectorAll('.qm')), openBtn=null, pinned=false;
+   function place(btn){
+     var host=qtip.offsetParent||qtip.parentElement;
+     var hr=host.getBoundingClientRect(), br=btn.getBoundingClientRect();
+     qtip.style.left='0px'; qtip.style.maxWidth='250px';
+     var tw=qtip.offsetWidth;
+     var left=br.left-hr.left+br.width/2-tw/2;
+     qtip.style.left=Math.max(6,Math.min(left,host.clientWidth-tw-6))+'px';
+     qtip.style.top=(br.bottom-hr.top+9)+'px';
+   }
+   function open(btn,pin){
+     var src=document.getElementById(btn.getAttribute('aria-describedby'));
+     qtip.textContent=src?src.textContent:'';
+     qtip.classList.add('on'); place(btn);
+     if(openBtn&&openBtn!==btn) openBtn.setAttribute('aria-expanded','false');
+     btn.setAttribute('aria-expanded','true'); openBtn=btn; if(pin) pinned=true;
+   }
+   function close(){
+     qtip.classList.remove('on'); pinned=false;
+     if(openBtn){ openBtn.setAttribute('aria-expanded','false'); openBtn=null; }
+   }
+   qs.forEach(function(btn){
+     btn.addEventListener('mouseenter',function(){ if(!pinned) open(btn,false); });
+     btn.addEventListener('mouseleave',function(){ if(!pinned) close(); });
+     btn.addEventListener('focus',function(){ open(btn,false); });
+     btn.addEventListener('blur',function(){ if(!pinned) close(); });
+     btn.addEventListener('click',function(e){
+       e.preventDefault();
+       if(pinned&&openBtn===btn) close(); else open(btn,true);
+     });
+   });
+   document.addEventListener('keydown',function(e){ if(e.key==='Escape') close(); });
+   document.addEventListener('click',function(e){
+     if(pinned && !(e.target.closest&&e.target.closest('.qm'))) close();
+   });
+   window.addEventListener('resize',function(){ if(openBtn) place(openBtn); });
+ })();
+
+ calculate();
+})();
+</script>
+</body></html>
