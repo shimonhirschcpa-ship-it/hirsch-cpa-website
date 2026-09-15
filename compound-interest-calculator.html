@@ -92,6 +92,18 @@
    focus is untouched and still shows whatever the browser draws today. */
 .chartbox rect.plot:focus:not(:focus-visible){outline:none}
 .chartbox rect.seg{transition:opacity .13s ease}
+#ltip{position:absolute;pointer-events:none;opacity:0;transition:opacity .12s;background:var(--ink);color:#fff;border-radius:9px;padding:10px 13px;font-size:13px;line-height:1.5;box-shadow:0 10px 26px rgba(0,0,0,.25);z-index:5;white-space:nowrap}
+#ltip .ty{font-weight:700;font-size:13.5px;padding-bottom:6px;margin-bottom:7px;color:#fff;border-bottom:1px solid rgba(255,255,255,.22)}
+#ltip .tr{display:flex;align-items:center;gap:16px;margin-top:4px}
+#ltip .tr .nm{display:flex;align-items:center;gap:7px;color:#D9D0C2}
+#ltip .tr .sw{width:10px;height:10px;border-radius:3px;flex:none}
+#ltip .tr b{margin-left:auto;font-variant-numeric:tabular-nums;font-weight:600}
+#ltip .tt{margin-top:7px;padding-top:7px;border-top:1px solid rgba(255,255,255,.22)}
+#ltip .tt .nm{color:#fff;font-weight:700}
+#ltip .tt b{font-weight:700}
+@media(max-width:430px){#ltip{padding:7px 9px;font-size:11.5px;border-radius:7px}#ltip .ty{font-size:12px;padding-bottom:4px;margin-bottom:5px}#ltip .tr{gap:10px;margin-top:2px}#ltip .tr .sw{width:8px;height:8px}#ltip .tt{margin-top:5px;padding-top:5px}}
+#lnote{margin:14px 0 0;font-size:13.5px;line-height:1.6;color:var(--body)}
+#lnote b{color:var(--ink)}
 #tip{position:absolute;pointer-events:none;opacity:0;transition:opacity .12s;background:var(--ink);color:#fff;border-radius:9px;padding:10px 13px;font-size:13px;line-height:1.5;box-shadow:0 10px 26px rgba(0,0,0,.25);z-index:5;white-space:nowrap}
 #tip .ty{font-weight:700;font-size:13.5px;margin-bottom:5px;color:#fff}
 #tip .tr{display:flex;justify-content:space-between;gap:16px;color:#D8CDBC}
@@ -168,7 +180,7 @@ table.yr td.tot{font-weight:700}
     <div class="vtitle" id="vTitle">Growth over time</div>
     <div class="vtabs" role="group" aria-label="Choose how to see the results">
      <button type="button" id="vChart" aria-pressed="true" aria-label="Show the chart" title="Chart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V13M9.5 20V9M15 20v-4.5M20.5 20V5.5"/></svg></button>
-     <button type="button" id="vTable" aria-pressed="false" aria-label="Show the table" title="Table"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><path d="M3 9.75h18M9.5 9.75V19.5"/></svg></button>
+     <button type="button" id="vLine" aria-pressed="false" aria-label="Show the graph" title="Graph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5M4 19h16"/><path d="M7 15.5 11 11l3 2.5 5-7"/></svg></button><button type="button" id="vTable" aria-pressed="false" aria-label="Show the table" title="Table"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><path d="M3 9.75h18M9.5 9.75V19.5"/></svg></button>
     </div>
    </div>
 
@@ -181,6 +193,18 @@ table.yr td.tot{font-weight:700}
      <div><i style="background:#9C7430"></i>Principal</div>
      <div><i style="background:#D2B27A"></i>Growth</div>
     </div>
+   </div>
+
+   <div id="paneLine" hidden>
+    <div class="chartwrap">
+     <div class="chartbox"><svg id="lchart" viewBox="0 0 520 230" role="img" aria-labelledby="lchartTitle"><title id="lchartTitle">What you put in and what it earned, year by year</title></svg></div>
+     <div id="ltip" role="status"></div>
+    </div>
+    <div class="legend">
+     <div><i style="background:#9C7430"></i>Total principal</div>
+     <div><i style="background:#D2B27A"></i>Total interest</div>
+    </div>
+    <p id="lnote" role="status"></p>
    </div>
 
    <div id="paneTable" hidden>
@@ -409,6 +433,185 @@ document.querySelectorAll(".reveal").forEach(function(el){io.observe(el);});</sc
    var size=parseFloat(getComputedStyle(el).fontSize), guard=0;
    while(el.scrollWidth>box && size>15 && guard<60){ size-=2; el.style.fontSize=size+'px'; guard++; }
  }
+
+ /* ---------- MOCKUP: total principal against total interest ----------
+    Two lines that start far apart and, if the money is left long enough,
+    cross: the year the interest earned overtakes everything paid in. That
+    crossing is the point of the view, so it is marked when it falls inside
+    the years on screen, and named in a line underneath when it does not.
+    Same rules as every other chart here: nothing clickable, nothing
+    focusable, drawn in plain JavaScript. */
+ var lastP=null, lgeo=null;
+
+ /* The first year the interest is ahead. Searched past the years on screen so
+    the note can still name it, capped at the 120 the field itself allows.
+    Nothing here changes what is drawn or what the figures say. */
+ function crossYear(){
+   if(!lastP) return null;
+   for(var i=0;i<rows.length;i++) if(rows[i].cumInt>rows[i].principal) return rows[i].year;
+   if(lastP.yrs>=120) return null;
+   var ext=project(lastP.p0,lastP.pmt,lastP.per,lastP.rate,120);
+   for(var j=0;j<ext.length;j++) if(ext[j].cumInt>ext[j].principal) return ext[j].year;
+   return null;
+ }
+
+ /* Its own measurement: chartWidth() reads the first .chartbox on the page,
+    which belongs to the bar chart. That pane is hidden while this one is
+    showing, so it measures nil and falls back to the default width. */
+ function lineWidth(){
+   var box=$('paneLine').querySelector('.chartbox');
+   var w=box?Math.round(box.clientWidth):0;
+   return w>60?w:520;
+ }
+ function drawLine(){
+   var svg=$('lchart'); if(!svg||!rows.length) return;
+   var W=lineWidth(), H=W<380?190:230;
+   var padL=44,padR=6,padB=22,padT=8;
+   var cw=W-padL-padR, ch=H-padT-padB;
+   var n=rows.length;
+   var max=Math.max.apply(null,rows.map(function(r){return Math.max(r.principal,r.cumInt)}))||1;
+   var mag=Math.pow(10,Math.floor(Math.log10(max))), top=Math.ceil(max/(mag/2))*(mag/2);
+   if(!isFinite(top)||top<=0) top=max>0?max:1;
+   var X=function(i){ return padL + (n===1?cw/2:(i/(n-1))*cw); };
+   var Y=function(v){ return padT + ch - (v/top)*ch; };
+   lgeo={padL:padL,cw:cw,n:n,top:top,W:W,pr:[],it:[]};
+
+   var s='';
+   for(var g=0;g<=3;g++){
+     var val=top*g/3, gy=Y(val);
+     s+='<line x1="'+padL+'" y1="'+gy.toFixed(1)+'" x2="'+(W-padR)+'" y2="'+gy.toFixed(1)+
+        '" stroke="#E8DFCF" stroke-width="1"/>';
+     s+='<text x="'+(padL-7)+'" y="'+(gy+3.6).toFixed(1)+'" text-anchor="end" '+
+        'font-family="Inter,sans-serif" font-size="10" fill="#8B7E6C">'+shortMoney(val)+'</text>';
+   }
+
+   var pr=[], it=[];
+   for(var i=0;i<n;i++){
+     var xi=X(i), yp=Y(rows[i].principal), yi=Y(rows[i].cumInt);
+     lgeo.pr.push([xi,yp]); lgeo.it.push([xi,yi]);
+     pr.push(xi.toFixed(1)+','+yp.toFixed(1));
+     it.push(xi.toFixed(1)+','+yi.toFixed(1));
+   }
+   var base=Y(0).toFixed(1), x0=X(0).toFixed(1), xn=X(n-1).toFixed(1);
+   /* each line shaded down to the baseline, the fainter one drawn first */
+   s+='<polygon points="'+x0+','+base+' '+pr.join(' ')+' '+xn+','+base+'" fill="#9C7430" opacity="0.10"/>';
+   s+='<polygon points="'+x0+','+base+' '+it.join(' ')+' '+xn+','+base+'" fill="#D2B27A" opacity="0.22"/>';
+
+   var step=Math.max(1,Math.ceil(n/Math.max(2,Math.floor(cw/30))));
+   for(var t=0;t<n;t++){
+     if(((t+1)%step===0)||t===n-1)
+       s+='<text x="'+X(t).toFixed(1)+'" y="'+(H-6)+'" text-anchor="middle" '+
+          'font-family="Inter,sans-serif" font-size="10" fill="#8B7E6C">'+rows[t].year+'</text>';
+   }
+
+   s+='<polyline points="'+pr.join(' ')+'" fill="none" stroke="#9C7430" stroke-width="2.4" '+
+      'stroke-linecap="round" stroke-linejoin="round"/>';
+   s+='<polyline points="'+it.join(' ')+'" fill="none" stroke="#D2B27A" stroke-width="2.4" '+
+      'stroke-linecap="round" stroke-linejoin="round"/>';
+
+   /* No dots at rest: the lines are drawn plain. The only markers are the two
+      that follow the pointer, below. Every year's point is still kept in lgeo,
+      which is what those markers are placed from. */
+
+   /* Which year the lines cross. Nothing is drawn on the chart to mark it:
+      he asked for the crossing not to be annotated. The lines still cross,
+      and the line under the chart still says which year it happens. */
+   var ci=-1;
+   for(var c=0;c<n;c++) if(rows[c].cumInt>rows[c].principal){ ci=c; break; }
+
+   /* the year being pointed at, so it is clear which year the box belongs to */
+   s+='<line id="lmL" x1="0" y1="'+padT+'" x2="0" y2="'+(padT+ch).toFixed(1)+
+      '" stroke="#8B7E6C" stroke-width="1" opacity="0"/>';
+   s+='<circle id="lmP" cx="0" cy="0" r="4.4" fill="#9C7430" stroke="#FBF8F2" stroke-width="2" opacity="0"/>';
+   s+='<circle id="lmI" cx="0" cy="0" r="4.4" fill="#D2B27A" stroke="#FBF8F2" stroke-width="2" opacity="0"/>';
+
+   s+='<rect class="lplot" x="'+padL+'" y="'+padT+'" width="'+cw.toFixed(1)+'" height="'+ch.toFixed(1)+
+      '" fill="transparent"/>';
+
+   var tp=$('ltip'); if(tp) tp.style.opacity='0';
+   svg.setAttribute('viewBox','0 0 '+W+' '+H);
+   svg.innerHTML='<title id="lchartTitle">What you put in and what it earned, year by year</title>'+s;
+   noteLine(ci);
+   wireLine();
+ }
+
+ /* The line underneath. On the figures the page opens with, the two lines do
+    not cross inside the years shown, and saying nothing would make the view
+    look broken. So it says plainly where the crossing is instead. */
+ function noteLine(ci){
+   var el=$('lnote'); if(!el) return;
+   var last=rows[rows.length-1], cy=crossYear();
+   if(ci>0){
+     el.innerHTML='From <b>year '+rows[ci].year+'</b> onwards the interest you have earned is worth '+
+       'more than everything you have paid in.';
+   } else if(cy){
+     el.innerHTML='The two lines have not crossed yet. After '+last.year+
+       (last.year===1?' year':' years')+' you would have put in <b>'+money(last.principal)+
+       '</b> and earned <b>'+money(last.cumInt)+'</b>. At this rate the interest would overtake '+
+       'what you put in around <b>year '+cy+'</b>.';
+   } else {
+     el.innerHTML='The two lines do not cross. After '+last.year+
+       (last.year===1?' year':' years')+' you would have put in <b>'+money(last.principal)+
+       '</b> and earned <b>'+money(last.cumInt)+'</b>.';
+   }
+ }
+
+ function hideLineTip(){
+   var t=$('ltip'); if(t) t.style.opacity='0';
+   ['lmL','lmP','lmI'].forEach(function(id){ var e=$(id); if(e) e.setAttribute('opacity','0'); });
+ }
+ function showLineAt(idx){
+   var r=rows[idx]; if(!r||!lgeo) return;
+   var tip=$('ltip'), wrap=$('paneLine').querySelector('.chartwrap'), svg=$('lchart');
+   /* The reference's three rows and nothing else: the two lines, then the
+      balance they add up to. Figures and their names only, no wording. */
+   tip.innerHTML='<div class="ty">Year '+r.year+'</div>'+
+     '<div class="tr"><span class="nm"><i class="sw" style="background:#9C7430"></i>Total principal</span>'+
+     '<b>'+money(r.principal)+'</b></div>'+
+     '<div class="tr"><span class="nm"><i class="sw" style="background:#D2B27A"></i>Total interest</span>'+
+     '<b>'+money(r.cumInt)+'</b></div>'+
+     '<div class="tr tt"><span class="nm">Total balance</span><b>'+money(r.balance)+'</b></div>';
+   tip.style.opacity='1';
+
+   var mp=lgeo.pr[idx], mi=lgeo.it[idx];
+   if(mp&&mi){
+     var ln=$('lmL'); if(ln){ ln.setAttribute('x1',mp[0].toFixed(1)); ln.setAttribute('x2',mp[0].toFixed(1)); ln.setAttribute('opacity','0.45'); }
+     var cp=$('lmP'); if(cp){ cp.setAttribute('cx',mp[0].toFixed(1)); cp.setAttribute('cy',mp[1].toFixed(1)); cp.setAttribute('opacity','1'); }
+     var ci2=$('lmI'); if(ci2){ ci2.setAttribute('cx',mi[0].toFixed(1)); ci2.setAttribute('cy',mi[1].toFixed(1)); ci2.setAttribute('opacity','1'); }
+   }
+   var sr=svg.getBoundingClientRect(), wr=wrap.getBoundingClientRect();
+   var scale=sr.width/lgeo.W;
+   var cx=sr.left+(lgeo.padL+(lgeo.n===1?lgeo.cw/2:(idx/(lgeo.n-1))*lgeo.cw))*scale;
+   var tw=tip.offsetWidth;
+   /* wrap.clientWidth, not wr.clientWidth: wr is a rectangle and has no such
+      property, so the whole expression came out as NaN and the box never moved.
+      The live page still has that fault. */
+   var maxL=wrap.clientWidth-tw-4;
+   tip.style.left=Math.max(4,Math.min(cx-wr.left-tw/2,maxL))+'px';
+   tip.style.top='0px';
+ }
+ var lineWired=false;
+ function wireLine(){
+   var plot=$('lchart').querySelector('rect.lplot'); if(!plot) return;
+   function idxAt(clientX){
+     var r=plot.getBoundingClientRect();
+     if(r.width<=0) return 0;
+     var f=(clientX-r.left)/r.width;
+     return Math.max(0,Math.min(lgeo.n-1,Math.round(f*(lgeo.n-1))));
+   }
+   plot.addEventListener('mousemove',function(e){ showLineAt(idxAt(e.clientX)); });
+   plot.addEventListener('mouseleave',hideLineTip);
+   plot.addEventListener('touchstart',function(e){ if(e.touches[0]) showLineAt(idxAt(e.touches[0].clientX)); },{passive:true});
+   plot.addEventListener('touchmove',function(e){ if(e.touches[0]) showLineAt(idxAt(e.touches[0].clientX)); },{passive:true});
+   if(!lineWired){
+     lineWired=true;
+     document.addEventListener('touchstart',function(e){
+       var t=e.target;
+       if(!(t && t.closest && t.closest('.chartwrap'))) hideLineTip();
+     },{passive:true});
+   }
+ }
+
  function drawTable(){
    $('tbody').innerHTML=rows.map(function(r){
      return '<tr><td>'+r.year+'</td><td>'+money(r.start)+'</td><td>'+money(r.addY)+'</td><td>'+money(r.cumAdd)+
@@ -421,21 +624,36 @@ document.querySelectorAll(".reveal").forEach(function(el){io.observe(el);});</sc
        rate=num($('rate'),0,100,0), yrs=Math.round(num($('yrs'),1,120,1)),
        per=parseInt(document.querySelector('input[name=freq]:checked').value,10);
    rows=project(p0,pmt,per,rate,yrs);
+   lastP={p0:p0,pmt:pmt,per:per,rate:rate,yrs:yrs};
    var last=rows[rows.length-1];
    $('leadTxt').textContent='In '+yrs+(yrs===1?' year':' years')+" you'd have";
    $('sTotal').textContent=money(last.balance);
    fitBig();
    drawChart(); drawTable();
+   if(!$('paneLine').hidden) drawLine();
  }
 
  wireMoney(['p0','pmt']);
  $('f').addEventListener('submit',function(e){e.preventDefault();calculate()});
 
- function setView(chart){
-   $('vChart').setAttribute('aria-pressed',chart); $('vTable').setAttribute('aria-pressed',!chart);
-   $('paneChart').hidden=!chart; $('paneTable').hidden=chart;
-   $('vTitle').textContent=chart?'Growth over time':'Year by year';
-   if(chart) drawChart();   /* the box had no width while it was hidden */
+ var VIEWS={
+   chart:{pane:'paneChart',btn:'vChart',title:'Growth over time'},
+   line: {pane:'paneLine', btn:'vLine', title:'Principal against interest'},
+   table:{pane:'paneTable',btn:'vTable',title:'Year by year'}
+ };
+ function setView(name){
+   if(name===true) name='chart';
+   if(name===false) name='table';
+   for(var k in VIEWS){
+     var v=VIEWS[k], on=(k===name);
+     $(v.pane).hidden=!on;
+     $(v.btn).setAttribute('aria-pressed',on?'true':'false');
+   }
+   $('vTitle').textContent=VIEWS[name].title;
+   if(name!=='chart') clearTip();
+   if(name!=='line') hideLineTip();
+   if(name==='chart') drawChart();   /* the box had no width while it was hidden */
+   if(name==='line')  drawLine();
  }
  /* the question marks: hover on a mouse, tap on a phone, escape or a tap away closes */
  (function(){
@@ -482,14 +700,15 @@ document.querySelectorAll(".reveal").forEach(function(el){io.observe(el);});</sc
    window.addEventListener('resize',function(){ if(openBtn) place(openBtn) });
  })();
 
- $('vChart').addEventListener('click',function(){setView(true)});
- $('vTable').addEventListener('click',function(){setView(false)});
+ $('vChart').addEventListener('click',function(){setView('chart')});
+ $('vLine').addEventListener('click',function(){setView('line')});
+ $('vTable').addEventListener('click',function(){setView('table')});
 
  /* Work it out once on load from the defaults, so the page never shows an empty
     result. After this it only recalculates when Calculate is pressed. */
  calculate();
  var rz; window.addEventListener('resize',function(){
-   clearTimeout(rz); rz=setTimeout(function(){ fitBig(); if(!$('paneChart').hidden) drawChart(); },150);
+   clearTimeout(rz); rz=setTimeout(function(){ fitBig(); if(!$('paneChart').hidden) drawChart(); if(!$('paneLine').hidden) drawLine(); },150);
  });
 })();
 </script>
