@@ -248,3 +248,22 @@ select.state:focus{outline:none;border-color:var(--gold)}
 .nf .cta{justify-content:center;margin-top:6px}
 .nf .links{margin-top:34px;padding-top:26px;border-top:1px solid var(--line);font-size:15px;color:var(--body)}
 .nf .links a{color:var(--gold-d);font-weight:600}
+
+/* home page: getting started, three numbered steps joined by a line.
+   Approved by Shimon 2026-09-24 from the mockup; replaces the plain .steps block there. */
+.head em{font-style:italic;color:var(--gold-d);font-weight:600}
+.headrule{width:56px;height:2px;background:var(--gold);margin:20px auto 0;border-radius:2px}
+.journey{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:40px;max-width:1000px;margin:0 auto}
+.jline{position:absolute;top:44px;left:16.7%;right:16.7%;height:1px;background:rgba(124,90,34,.28)}
+.jstep{position:relative;text-align:center}
+.jnum{width:88px;height:88px;border-radius:50%;background:var(--ink);color:var(--gold);font-family:'Fraunces',Georgia,serif;font-size:30px;font-weight:600;letter-spacing:.02em;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;position:relative;z-index:1}
+.jstep h4{font-size:21px;margin-bottom:9px}
+.jstep p{font-size:15px;color:var(--body);line-height:1.7;max-width:300px;margin:0 auto}
+.journey .jstep:nth-child(3){transition-delay:.08s}.journey .jstep:nth-child(4){transition-delay:.16s}
+@media(max-width:860px){
+ .journey{grid-template-columns:1fr;gap:38px;max-width:420px}
+ .jline{display:none}
+ .jnum{width:72px;height:72px;font-size:26px;margin-bottom:15px}
+ .jstep p{max-width:none}
+ .gs .head h2{font-size:31px}
+}
