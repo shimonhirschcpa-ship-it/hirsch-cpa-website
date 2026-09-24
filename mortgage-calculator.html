@@ -123,6 +123,41 @@ table.yr td.tot{font-weight:700;color:var(--ink)}
 .disc{background:var(--cream);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:12px;padding:16px 18px;font-size:13.5px;line-height:1.65;color:var(--ink);max-width:1000px;margin:30px auto 0}
 @media(max-width:860px){.calc{grid-template-columns:1fr;gap:24px}.res,.cpanel{padding:20px}.hbig{font-size:42px}.optgrid{grid-template-columns:1fr}
 .vhead{grid-template-columns:1fr;gap:6px}.vtitle{grid-column:1}.vtabs{grid-column:1;justify-self:end}}
+
+/* Header and closing panel, approved by Shimon 2026-09-24 (item 30). The header shows this
+   calculator's own drawing, the same one as its card on the Financial Calculators page. A new
+   calculator uses its card drawing here too. The closing panel is the light version on purpose:
+   the dark one competed with the results and chart. Every class here is new to this page. */
+.chd .crumb{display:inline-flex;align-items:center;gap:7px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-d);font-weight:700;margin-bottom:12px}
+.chd .crumb:hover{color:var(--ink)}
+.chd .crumb .ar{font-size:14px;letter-spacing:0;transition:transform .2s}.chd .crumb:hover .ar{transform:translateX(-3px)}
+.chd h1{font-size:44px;margin-bottom:12px}.chd h1 em{font-style:italic;color:var(--gold-d)}
+.chd p{font-size:17px;color:var(--body);max-width:640px;line-height:1.6}
+
+.chd{background:var(--cream);border-bottom:1px solid var(--line);padding:46px 0 42px;position:relative;overflow:hidden}
+.chd .wrap{position:relative}
+.chd .art{position:absolute;right:30px;top:50%;width:230px;height:230px;transform:translateY(-50%) rotate(-6deg);color:var(--gold);opacity:.26;pointer-events:none}
+.chd .art .ic{width:100%;height:100%;stroke-width:1.5}.chd .art .dot{fill:var(--gold);stroke:none}.chd .art .knock{fill:var(--cream)}
+.chd .txt{position:relative;max-width:700px}
+@media(max-width:700px){
+ .chd{padding:26px 0 24px}
+ .chd .art{width:66px;height:66px;right:0;top:0;transform:rotate(-6deg);opacity:.3}
+ .chd .crumb{font-size:11px;margin-bottom:8px}
+ .chd h1{font-size:29px;margin-bottom:9px;max-width:calc(100% - 70px)}.chd p{font-size:15.5px}
+}
+.ccl{background:var(--cream);border-top:1px solid var(--line);padding:56px 0 64px}
+.ccl-card{border-radius:18px;padding:40px 46px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;max-width:980px;margin:0 auto}
+.ccl-card h2{font-size:32px;margin-bottom:8px}.ccl-card h2 em{font-style:italic}
+.ccl-card p{font-size:17px}
+.ccl-contact{display:flex;gap:26px;flex-wrap:wrap;font-size:15px;font-weight:600;margin-top:20px}
+.ccl-contact .k{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;margin-bottom:3px}
+@media(max-width:860px){.ccl{padding:40px 0 48px}.ccl-card{grid-template-columns:1fr;padding:28px 22px;gap:20px}.ccl-card h2{font-size:26px}.ccl-card p{font-size:16px}}
+
+.ccl-card{background:#fff;border:1px solid var(--line);box-shadow:0 14px 34px rgba(43,38,32,.07);position:relative;overflow:hidden}
+.ccl-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--gold)}
+.ccl-card h2 em{color:var(--gold-d)}.ccl-card p{color:var(--body)}
+.ccl-contact{color:var(--ink)}.ccl-contact .k{color:var(--gold-d)}.ccl-contact a:hover{color:var(--gold-d)}
+
 </style><script>document.documentElement.className+=" js-motion";</script></head><body><header><div class="wrap nav">
 <a href="index.html#top" class="brand"><img src="assets/logo-emblem.png" alt="Hirsch CPA"><div class="bt"><div class="nmrow"><span class="h">HIRSCH</span> <span class="c">CPA</span></div><div class="subttl">Certified Public Accountants</div></div></a>
 <nav class="nl">
@@ -137,7 +172,7 @@ table.yr td.tot{font-weight:700;color:var(--ink)}
 <button class="macc" onclick="accToggle(this)">Services <span class="av">&#9662;</span></button><div class="msub"><a href="services/tax-preparation.html">Tax Preparation</a><a href="services/bookkeeping.html">Bookkeeping</a><a href="services/payroll.html">Payroll</a><a href="services/sales-tax.html">Sales Tax</a><a href="services/audit.html">Audit</a><a href="services/advisory.html">Advisory</a></div>
 <button class="macc" onclick="accToggle(this)">Resources <span class="av">&#9662;</span></button><div class="msub"><a href="track-refund.html">Track Your Refund</a><a href="tax-due-dates.html">Due Dates</a><a href="calculators.html">Financial Calculators</a></div>
 <a class="mbook" href="contact.html">Book a call</a></div>
-<section class="phero"><img class="wm" src="assets/logo-emblem.png" alt=""><div class="wrap"><h1>Mortgage Payment Calculator</h1><p>Estimate what a home loan would cost you each month. Enter the price, what you are putting down, the interest rate and how long you would pay it over to see your payment and what the loan costs in total.</p></div></section>
+<section class="chd"><div class="wrap"><div class="art" aria-hidden="true"><svg class="ic" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 31 32 12l24 19"/><path d="M15 26v28h34V26"/><rect x="27" y="40" width="10" height="14" rx="1"/><rect x="19" y="32" width="6" height="6" rx="1"/><rect x="39" y="32" width="6" height="6" rx="1"/><path d="M42 19v-6h5v10"/></svg></div><div class="txt"><a class="crumb" href="calculators.html"><span class="ar">&larr;</span>Financial Calculators</a><h1>Mortgage Payment <em>Calculator</em></h1><p>Estimate what a home loan would cost you each month. Enter the price, what you are putting down, the interest rate and how long you would pay it over to see your payment and what the loan costs in total.</p></div></div></section>
 
 <section class="detail"><div class="wrap">
 <div class="calc">
@@ -244,6 +279,11 @@ table.yr td.tot{font-weight:700;color:var(--ink)}
 
 </div></section>
 
+<section class="ccl"><div class="wrap"><div class="ccl-card">
+ <div><h2>Questions about <em>your results?</em></h2><p>Book a free call and we'll go through them with you.</p>
+  <div class="ccl-contact"><span><span class="k">Phone</span><a href="tel:+13474862780">(347) 486-2780</a></span><span><span class="k">Email</span><a href="mailto:info@hirsch.cpa">info@hirsch.cpa</a></span></div></div>
+ <div class="ccl-btns"><a class="btn gold lg" href="contact.html">Book a free call</a></div>
+</div></div></section>
 <footer><div class="wrap"><div class="foot">
 <div><div class="nm">HIRSCH <span>CPA</span></div><div class="sb">Hirsch &amp; Co. Accounting LLC · Certified Public Accountants</div></div>
 <div class="fcol"><h5>Services</h5><a href="services/tax-preparation.html">Tax Preparation</a><a href="services/bookkeeping.html">Bookkeeping</a><a href="services/payroll.html">Payroll</a><a href="services/sales-tax.html">Sales Tax</a><a href="services/audit.html">Audit</a><a href="services/advisory.html">Advisory</a></div>
