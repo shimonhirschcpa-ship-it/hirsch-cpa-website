@@ -20,7 +20,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/site.css">
 <style>
-/* Financial Calculators page, approved by Shimon 2026-09-24 (direction C, bold dark, with the
+/* Financial Calculators page, approved by Shimon 2026-09-24. The header was dark at first; he
+   chose the cream version (H2) the same day. Direction C, with the
    revised cards: one drawing per card, no corner icon). Every class here is new and used only
    on this page, so nothing on the home page or elsewhere changes. Cards centre and wrap:
    three across, four as two and two, five as three and two, six as three and three. */
@@ -49,13 +50,12 @@
  .pv .txt{padding:16px 20px 20px}
  .pv h3{font-size:21px}
 }
-.cpC-hero{background:var(--ink);color:#E6DBC8;padding:78px 0 150px;position:relative;overflow:hidden}
-.cpC-hero .deco{position:absolute;right:-40px;bottom:-10px;width:620px;height:320px;opacity:.16}
+.cpC-hero{background:var(--cream);padding:78px 0 150px;position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+.cpC-hero .deco{position:absolute;right:-40px;bottom:-10px;width:620px;height:320px;opacity:.22}
 .cpC-hero .in{position:relative;max-width:640px}
-.cpC-hero .cp-eyebrow{color:#CBA968}
-.cpC-hero h1{color:#fff;font-size:54px;margin-bottom:18px}
-.cpC-hero h1 em{font-style:italic;color:#C9A868}
-.cpC-hero p{font-size:19px;color:#E6DBC8;max-width:520px}
+.cpC-hero h1{font-size:54px;margin-bottom:18px}
+.cpC-hero h1 em{font-style:italic;color:var(--gold-d)}
+.cpC-hero p{font-size:19px;color:var(--body);max-width:520px}
 .cpC-list{background:var(--bg);padding:0 0 76px}
 .cpC-list .cgrid{position:relative;margin-top:-104px}
 .cpC-list .pv{box-shadow:0 18px 40px rgba(43,38,32,.12)}
@@ -91,7 +91,7 @@
 <button class="macc" onclick="accToggle(this)">Services <span class="av">&#9662;</span></button><div class="msub"><a href="services/tax-preparation.html">Tax Preparation</a><a href="services/bookkeeping.html">Bookkeeping</a><a href="services/payroll.html">Payroll</a><a href="services/sales-tax.html">Sales Tax</a><a href="services/audit.html">Audit</a><a href="services/advisory.html">Advisory</a></div>
 <button class="macc" onclick="accToggle(this)">Resources <span class="av">&#9662;</span></button><div class="msub"><a href="track-refund.html">Track Your Refund</a><a href="tax-due-dates.html">Due Dates</a><a href="calculators.html">Financial Calculators</a></div>
 <a class="mbook" href="contact.html">Book a call</a></div>
-<section class="cpC-hero"><svg class="deco" viewBox="0 0 620 320" fill="none" aria-hidden="true"><path d="M0 300 C160 290 300 230 420 120 S580 20 620 10" stroke="#C9A868" stroke-width="3"/><path d="M0 250 L620 170" stroke="#EFE4CE" stroke-width="2"/><rect x="20" y="278" width="30" height="22" fill="#C9A868"/><rect x="76" y="276" width="30" height="24" fill="#C9A868"/><rect x="132" y="269" width="30" height="31" fill="#C9A868"/><rect x="188" y="257" width="30" height="43" fill="#C9A868"/><rect x="244" y="241" width="30" height="59" fill="#C9A868"/><rect x="300" y="220" width="30" height="80" fill="#C9A868"/><rect x="356" y="195" width="30" height="105" fill="#C9A868"/><rect x="412" y="165" width="30" height="135" fill="#C9A868"/><rect x="468" y="131" width="30" height="169" fill="#C9A868"/><rect x="524" y="92" width="30" height="208" fill="#C9A868"/><rect x="580" y="48" width="30" height="252" fill="#C9A868"/><path d="M0 300H620" stroke="#EFE4CE" stroke-width="1.5"/></svg><div class="wrap"><div class="in">
+<section class="cpC-hero"><svg class="deco" viewBox="0 0 620 320" fill="none" aria-hidden="true"><path d="M0 300 C160 290 300 230 420 120 S580 20 620 10" stroke="#9C7430" stroke-width="3"/><path d="M0 250 L620 170" stroke="#9C7430" stroke-width="2"/><rect x="20" y="278" width="30" height="22" fill="#C9A868"/><rect x="76" y="276" width="30" height="24" fill="#C9A868"/><rect x="132" y="269" width="30" height="31" fill="#C9A868"/><rect x="188" y="257" width="30" height="43" fill="#C9A868"/><rect x="244" y="241" width="30" height="59" fill="#C9A868"/><rect x="300" y="220" width="30" height="80" fill="#C9A868"/><rect x="356" y="195" width="30" height="105" fill="#C9A868"/><rect x="412" y="165" width="30" height="135" fill="#C9A868"/><rect x="468" y="131" width="30" height="169" fill="#C9A868"/><rect x="524" y="92" width="30" height="208" fill="#C9A868"/><rect x="580" y="48" width="30" height="252" fill="#C9A868"/><path d="M0 300H620" stroke="#9C7430" stroke-width="1.5"/></svg><div class="wrap"><div class="in">
  <div class="cp-eyebrow">Resources</div>
  <h1>Financial <em>calculators</em></h1>
  <p>Free tools to help you see where you stand. Pick one to get started.</p>
