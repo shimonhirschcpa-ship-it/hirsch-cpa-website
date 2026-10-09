@@ -1,0 +1,9 @@
+# Files in this repo that must NEVER be published on the website.
+# Vercel serves every file in this folder unless it is listed here.
+# The project notes (TODO, AUDITS, CLAUDE, DECISIONS) hold security
+# findings and must stay in the repo for backup but off the live site.
+*.md
+.claude
+# Leftover from GitHub Pages; does nothing on Vercel. Also serves as the
+# live proof that this file is honoured (it should return 404).
+.nojekyll
