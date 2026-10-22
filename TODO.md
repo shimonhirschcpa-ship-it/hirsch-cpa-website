@@ -119,9 +119,55 @@ entry lists them.
 ### 1. Anyone who types hirsch.cpa gets a browser security warning
 
 **Added:** 2026-08-26 · **Updated 2026-08-26** — Shimon asked for this directly, and the design
-audit the same day found the situation is worse than the domain simply not being connected
+audit the same day found the situation is worse than the domain simply not being connected ·
+**Updated 2026-10-21** — diagnosed in full against his Vercel account and the live DNS. **The
+exact fix is now known and it is two lines of typing.**
 
 In his words: **"We have to connect the real domain of hirsch.cpa."**
+
+> ### 🟢 2026-10-21 — WE NOW KNOW EXACTLY WHAT IS WRONG AND EXACTLY HOW TO FIX IT
+>
+> **The site is ready and waiting.** Both `hirsch.cpa` and `www.hirsch.cpa` have already been
+> added to the website’s Vercel project. Vercel is sitting there holding the door open. What it
+> cannot do is answer the door, because **Vercel is not in charge of the domain — EnCirca is**,
+> and EnCirca is still sending every visitor to a parking page instead of to the site.
+>
+> **That parking page is the security warning.** It answers in the name of a completely different
+> domain, so the browser says the site is pretending to be someone it is not. Nothing is broken
+> or hacked. The signpost is simply pointing at the wrong building.
+>
+> **The fix is two edits in his EnCirca account**, and they are listed in the reference block
+> below so they can be read out one field at a time.
+>
+> ### ✅ HIS EMAIL IS NOT AT RISK FROM THIS. THIS IS THE IMPORTANT PART.
+>
+> This is the thing that would otherwise make anyone hesitate, so it is worth being plain about.
+> **The firm’s email is on Microsoft 365 and these two edits cannot touch it.** Mail and the
+> website are steered by completely separate entries, and we are not going near the mail ones:
+>
+> - **Mail is delivered by the MX entry.** We are changing an **A** entry. Different kind of
+>   entry entirely — the same way changing a phone number does not change a postal address.
+> - **The records that prove his mail is genuine** — the SPF line and the Microsoft
+>   verification line — are **TXT** entries. Also untouched.
+> - **The `autodiscover` entry**, the one that lets Outlook set itself up, sits under a different
+>   name. Untouched.
+> - The second edit is to **`www`**, which has nothing to do with mail at all.
+>
+> **So: no interruption to sending or receiving, nothing to re-set up in Outlook, nothing for
+> staff to notice.**
+>
+> ### ⚠️ THE ONE THING THAT WOULD BREAK HIS EMAIL
+>
+> **Clearing the slate.** If anyone — him, EnCirca support, or a future Claude — decides the
+> tidy way to do this is to **delete all the records and start fresh**, or accepts an EnCirca
+> preset or wizard that **rewrites the whole zone**, the mail records go with them and the firm
+> stops receiving email. **Change the two entries named below and leave every other line exactly
+> as it is.** One record at a time. Nothing else gets touched.
+>
+> ### 👤 HE NEEDS TO BE THERE
+>
+> It is his registrar account and his firm’s mail, and **he has said he wants to do it
+> together rather than have it done unattended.** Do not attempt this without him.
 
 Here is what a visitor actually sees today if they type **hirsch.cpa** into a browser:
 
@@ -185,6 +231,59 @@ the two are worth doing as one piece of work.
 >
 > **Note on HSTS.** The vercel.app response includes `includeSubDomains; preload`. Worth checking the
 > preload implications before the cutover rather than during it.
+>
+> ---
+>
+> ## 🔧 THE FIX, ESTABLISHED 2026-10-21
+>
+> *Checked against his Vercel project and the live DNS on the day. This supersedes the “what would
+> close it” sketch above for parts (a) and (b); (c) the address tags and (d) robots/sitemap are
+> still outstanding and still have to land with the cutover.*
+>
+> **State of the Vercel side.** Both `hirsch.cpa` and `www.hirsch.cpa` are already added to the
+> `hirsch-cpa-website` project. Both show **Invalid Configuration**. **`www` is set as the
+> production domain** and the apex `308`-redirects to it, which is the right way round and does not
+> need changing. **Vercel is not authoritative for this domain and cannot fix any of this from its
+> own side** — the nameservers are `standard3.encirca.net` / `standard4.encirca.net`, so every
+> change has to be made at EnCirca.
+>
+> **State of the DNS side.** Both names still answer `44.198.11.225`, an AWS address belonging to
+> EnCirca’s parking/forwarding service, not to Vercel. That host serves TLS under a certificate
+> for an unrelated domain, which is precisely the full screen warning. **`www` is additionally the
+> wrong record type** — it is an `A` record where Vercel expects a `CNAME`.
+>
+> **The two edits at EnCirca:**
+>
+> | Host | Type | Value |
+> |------|------|-------|
+> | `@` | `A` | `216.198.79.1` |
+> | `www` | `CNAME` | `5155ef845899a04b.vercel-dns-017.com.` |
+>
+> The `www` value is project specific — **copy it from Vercel on the day rather than from this
+> file**, in case it has been reissued. The trailing dot belongs on the end.
+>
+> **Why mail survives this, in technical terms.** Mail is `MX` on `@`; SPF and the Microsoft
+> verification string are `TXT` on `@`; `autodiscover` is a `CNAME` on its own name. **Editing the
+> `A` record on `@` changes none of them — a name carries records of several types independently,
+> and replacing one type does not disturb the others.** The `www` edit is on a different name again.
+> **Verify rather than trust:** read the MX and TXT lines before the edits and again after, and
+> confirm they are byte for byte identical.
+>
+> **⚠️ Caveat one — web forwarding may fight back.** EnCirca may have **web forwarding enabled
+> as a product feature** rather than as a plain `A` record. If it is on, **it will re-assert the
+> parking address over whatever `A` record is set** and the change will appear to work and then
+> silently revert. **Look for it and switch it off first.** If the apex keeps returning to
+> `44.198.11.225` after a correct edit, this is why.
+>
+> **⚠️ Caveat two — do not judge it too early.** TTLs are `3600`, so **allow an hour or more**
+> before deciding whether it worked; it can take longer for any one person depending on what their
+> own network has cached. Vercel issues the certificate **automatically** once it can verify the
+> records — there is nothing to buy, install or paste, and the warning disappears on its own when
+> the certificate lands. **Do not start re-editing records during that wait.**
+>
+> **How to know it worked:** both entries flip from Invalid Configuration to Valid in Vercel,
+> `hirsch.cpa` resolves to `216.198.79.1` instead of `44.198.11.225`, and the site loads with a
+> padlock and no warning on both the apex and `www`.
 
 ---
 
