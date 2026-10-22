@@ -756,7 +756,7 @@ them a dead end instead of a door back in.
 
 ### 30. A row of contact icons in the footer — phone, WhatsApp, email, LinkedIn
 
-**✅ BUILT 2026-10-22, NOT YET DEPLOYED.** Waiting on him to confirm from the screenshots.
+**✅ DONE — APPROVED AND LIVE 2026-10-22, commit `ff0926a`.** He approved it from the screenshots. Verified on the live site afterwards: the row renders at desktop and phone width, the WhatsApp link opens a real chat with the firm's number and the opening line in place, and the three calculators are untouched.
 
 Four small gold icons sit under the firm name in the footer on all 17 pages: **call, WhatsApp, email, LinkedIn.** Tapping WhatsApp opens a chat with the firm, already carrying the line *“Hello, I’m getting in touch from hirsch.cpa.”*, which the person can edit or delete before sending.
 
