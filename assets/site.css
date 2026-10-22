@@ -84,6 +84,17 @@ footer{background:#231F1A;color:#B8AC98;padding:56px 0 26px;font-size:14px}
 .foot .sb{font-size:12px;color:#8B8271;margin-top:8px;max-width:220px}
 .fcol h5{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#fff;margin-bottom:14px}
 .fcol a{display:block;color:#B8AC98;padding:5px 0;transition:color .12s}.fcol a:hover{color:#fff}
+/* Footer contact row. A grid of fixed cells rather than a loose flex row, so the
+   spacing stays on an exact rhythm. Folds to two by two on a narrow phone, where the
+   footer column is only about 156px wide and four across would have to shrink below a
+   comfortable tap size. Hover borrows the gold buttons' own language. */
+.fsoc{display:grid;grid-template-columns:repeat(4,40px);gap:10px;margin-top:18px}
+.fsoc a{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border:1px solid #3A342C;border-radius:10px;color:#C9A868;transition:color .14s,background .14s,border-color .14s,transform .14s,box-shadow .14s}
+.fsoc svg{width:18px;height:18px;display:block}
+.fsoc a:hover{color:#231F1A;background:#C9A868;border-color:#C9A868;transform:translateY(-1px);box-shadow:0 6px 16px rgba(201,168,104,.22)}
+.fsoc a:focus:not(:focus-visible){outline:none}
+@media(max-width:820px){.fsoc{grid-template-columns:repeat(4,44px)}.fsoc a{width:44px;height:44px}.fsoc svg{width:20px;height:20px}}
+@media(max-width:560px){.fsoc{grid-template-columns:repeat(2,44px)}}
 .copy{border-top:1px solid #3A342C;margin-top:40px;padding-top:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:12.5px;color:#8B8271}
 /* reveal animation
    Content is VISIBLE by default. The small script in each page's <head> adds

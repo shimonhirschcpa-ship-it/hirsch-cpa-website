@@ -49,6 +49,26 @@ They are the whole point of the record. See [CLAUDE.md](CLAUDE.md) Rule 5.
 
 ## ENTRIES
 
+### A row of contact icons in the footer — phone, WhatsApp, email, LinkedIn
+
+**When:** 2026-10-22 · **Commit:** this commit (item 30)
+
+**What changed:** four small gold icons added under the firm name in the footer on all 17 pages. The WhatsApp one opens a chat with the firm carrying a prefilled opening line. The email address and phone number remain written out in the Get in touch column as before.
+
+**Why — in Shimon's words:** he asked for the LinkedIn page to be linked, chose the icon treatment over a plain word, and then asked for WhatsApp as well, and for email and phone alongside them. On colour: *“I don’t want to have a colorful page, doesn’t make sense.”*
+
+**Was a preview approved?** Yes. Three rounds of mockups: placement first, then two icons, then four. The version that replaced the written email and phone with icons was built, shown and rejected.
+
+**What could break, and why:** the footer is on every page, so this touches all 17 at once — which is why it was proved that deleting the new row restores each file byte for byte. The live risk is the **WhatsApp link**: `wa.me` fails with an error screen if the number is not on WhatsApp. He confirmed it is. **No published statement stops being true** — checked against the privacy policy, which says the site sets no cookies and sends nothing; these are ordinary links and still send nothing.
+
+**Conflicts with an existing rule?** One worth recording. **LinkedIn and WhatsApp both ask that their marks are not recoloured**, and these are gold. That was put to him plainly with the risk stated, and he chose gold anyway, which is his call to make. Recolouring social marks to a site palette is common practice and the practical risk to a firm this size is close to nil.
+
+**How it was checked:** all 17 pages carry exactly one row with the four correct links, correct labels, and `rel="noopener"` on the two that leave the site. Rendered at 1280px and at a true 390px and looked at. The year-by-year tables on all three calculators are intact and the calculator views still switch. No console errors, no sideways scroll on a phone.
+
+> **This is Shimon's decision. No Claude may change it on its own initiative.**
+
+---
+
 ### Calculator pages: a header with each calculator's own drawing, and a closing panel
 
 **When:** 2026-09-24 · **Commit:** `f8c1c55` (closes item 30)

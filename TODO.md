@@ -754,6 +754,32 @@ them a dead end instead of a door back in.
 
 ---
 
+### 30. A row of contact icons in the footer — phone, WhatsApp, email, LinkedIn
+
+**✅ BUILT 2026-10-22, NOT YET DEPLOYED.** Waiting on him to confirm from the screenshots.
+
+Four small gold icons sit under the firm name in the footer on all 17 pages: **call, WhatsApp, email, LinkedIn.** Tapping WhatsApp opens a chat with the firm, already carrying the line *“Hello, I’m getting in touch from hirsch.cpa.”*, which the person can edit or delete before sending.
+
+**The email address and phone number stay written out in the footer as well.** They are not replaced by the icons.
+
+> 📎 **CONTEXT FOR CLAUDE**
+>
+> **His decisions, in his words.** He picked the icon placement over a plain word. On colour: *“I don’t want to have a colorful page, doesn’t make sense”* — so all four are his gold, **and he made that choice knowing** that LinkedIn and WhatsApp both ask in their brand rules that their marks are not recoloured. The practical risk to a small firm is close to nil, but it was put to him and he chose. **Do not quietly switch them to blue and green.**
+>
+> **Why the text stayed.** Icons replacing the written email and phone was built and shown, and rejected: it leaves the Get in touch column holding one item beside two columns of six, and it takes the firm’s phone number and email off the page as readable, copyable text — which for a regulated practice is a trust signal worth more than avoiding the repetition.
+>
+> **Worth knowing if the row is ever revisited:** the phone and email icons add no new ability, because the text links in the Get in touch column are already tappable. **LinkedIn and WhatsApp are the only two that go somewhere new.** If the row ever needs trimming, those are the two to keep.
+>
+> **The WhatsApp number is confirmed.** He verified (347) 486-2780 is on WhatsApp. A `wa.me` link to a number without WhatsApp fails with an “invalid number” screen, so **if the firm ever moves messaging to a different mobile, this link has to move with it.**
+>
+> **Build detail.** One row added to the `.sb` block of the footer on all 17 pages, plus a `.fsoc` block in `assets/site.css`. **Anchor on `<div class="sb">…</div></div>`, not on the words “Certified Public Accountants”** — 404.html carries those words a second time in its `.bt` block, which is not the footer. 40px targets on desktop, 44px on a phone, folding to two by two under 560px where the footer column is only about 156px wide. `tel:` and `mailto:` deliberately have no `target="_blank"`; the two external links have `rel="noopener"`.
+>
+> **Checked:** all 17 pages carry exactly one row with the four correct links, labels and new-tab behaviour. **Removing the new row from each page restores the original file byte for byte**, so nothing else in the footer moved. The year-by-year tables on all three calculators are intact, the three calculator views still switch, no console errors, and no sideways scroll at phone width.
+
+**Added:** 2026-10-22 · *requested by Shimon*
+
+---
+
 ### 10. The six service pages look different from the rest when shared
 
 **Added:** 2026-08-26 · *found in the design audit*
