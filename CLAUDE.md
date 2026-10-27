@@ -152,3 +152,5 @@ underneath it. That is the normal way this goes wrong. See items 1 and 2 in [TOD
 
 **These rules bind Claudes. They never bind Shimon.** He owns this site. He can revise any decision
 at any time. When he does, you update the record — you never argue the rulebook back at him.
+
+Read CLAUDE-WORKING-RULES.md in this repo before doing anything. It holds Shimon's standing rules and the approval process.
