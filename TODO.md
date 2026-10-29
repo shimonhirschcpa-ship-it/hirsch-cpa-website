@@ -118,6 +118,16 @@ entry lists them.
 
 ### 1. Anyone who types hirsch.cpa gets a browser security warning
 
+**2026-10-28: the domain is live (www.hirsch.cpa, apex redirects to it).** Parts (c) and (d) below,
+the address tags plus robots and sitemap, are built locally and waiting for his go to push; see the
+DECISIONS entry of the same date. After that: Google Search Console and the Business Profile link,
+with him.
+
+**🔗 2026-10-28: a second EnCirca job is waiting, do both in one sitting with Shimon.** The portal's
+to-do item 53, *"Sign-in codes reach Microsoft mailboxes late: give the portal its own Brevo sending
+domain"* (`hirsch-portal/docs/TODO.md`), adds records for a new subdomain such as
+`portal.hirsch.cpa`. It must not touch the existing `hirsch.cpa` mail records, and neither must this one.
+
 **Added:** 2026-08-26 · **Updated 2026-08-26** — Shimon asked for this directly, and the design
 audit the same day found the situation is worse than the domain simply not being connected ·
 **Updated 2026-10-21** — diagnosed in full against his Vercel account and the live DNS. **The
@@ -147,7 +157,7 @@ In his words: **"We have to connect the real domain of hirsch.cpa."**
 >
 > - **Mail is delivered by the MX entry.** We are changing an **A** entry. Different kind of
 >   entry entirely — the same way changing a phone number does not change a postal address.
-> - **The records that prove his mail is genuine** — the SPF line and the Microsoft
+> - **The records that prove the firm's mail is genuine** — the SPF line and the Microsoft
 >   verification line — are **TXT** entries. Also untouched.
 > - **The `autodiscover` entry**, the one that lets Outlook set itself up, sits under a different
 >   name. Untouched.
@@ -166,7 +176,7 @@ In his words: **"We have to connect the real domain of hirsch.cpa."**
 >
 > ### 👤 HE NEEDS TO BE THERE
 >
-> It is his registrar account and his firm’s mail, and **he has said he wants to do it
+> It is the firm's registrar account and the firm’s mail, and **he has said he wants to do it
 > together rather than have it done unattended.** Do not attempt this without him.
 
 Here is what a visitor actually sees today if they type **hirsch.cpa** into a browser:
@@ -1128,7 +1138,7 @@ from a second card on the Financial Calculators page.
 > prose rounds the intermediate values. Their calculator is right; their article's hand-working is
 > not. **Do not "correct" ours to match their article.**
 >
-> **Rounding, since Shimon is a CPA and may add the column up:** each schedule row is shown to the
+> **Rounding, since Shimon is an accountant in training and may add the column up:** each schedule row is shown to the
 > whole dollar, so summing the column by hand lands $1 to $3 away from the total across 15 to 30 rows.
 > That is display rounding, not a difference in method — the breakdown totals are taken from the same
 > month-by-month walk that builds the schedule, so there is only ever one source of truth.
@@ -1177,7 +1187,7 @@ figures, and a lender's real numbers will always differ from any estimate.
 >
 > **⚠️ One judgement call he has to confirm.** Mortgage insurance is added automatically when the
 > deposit is under 20%, estimated at **0.5% of the loan a year**. That is a mid-range industry figure,
-> not his firm's figure, and the page says so on screen. **If he is not comfortable publishing an
+> not the firm's figure, and the page says so on screen. **If he is not comfortable publishing an
 > assumed rate, the alternative is to drop the PMI line entirely** and note that lenders add it below
 > 20% — ask him rather than deciding.
 >
@@ -1292,7 +1302,7 @@ figures, and a lender's real numbers will always differ from any estimate.
 >
 > **⚠️ Careful with the standing instruction here.** Shimon has said that for this calculator,
 > **"all of these changes follow the link I gave you"** — moneygeek.com is the authority on layout
-> and interaction. **His site's colours still win over the reference's.** Where the two disagree on
+> and interaction. **The firm's site colours still win over the reference's.** Where the two disagree on
 > anything else, go and look at the reference rather than guessing from a description.
 >
 > **A version mix up worth knowing about.** His screenshot for this round showed a sentence under the
@@ -2631,7 +2641,7 @@ larger question of sequencing is still open.
 > his control; the domain and form both need decisions and outside services. There is no technical
 > reason they compete. The only real cost of doing motion first is that the site gets livelier while
 > still losing enquiries — **which is worth saying once, plainly, and then dropping.** He has been
-> told; it is his firm.
+> told; it is the firm's call.
 >
 > **One genuine dependency worth flagging:** M24 and I24 both add or restyle routes to the Contact
 > page. Making those routes more prominent while the form is dead in item 2 makes that problem
@@ -3135,7 +3145,7 @@ calculators are tracked as items 17 and 18, not here.
 > **What the other site does.** Offers calculators as a footer resource.
 >
 > **Relevant precedent already here.** Track Your Refund and Tax Return Due Dates are exactly this
-> kind of thing and are the most genuinely useful pages on his site. This idea extends a pattern
+> kind of thing and are the most genuinely useful pages on the firm's site. This idea extends a pattern
 > that already works rather than starting something new.
 >
 > **⚠️ Accuracy constraint.** A calculator published by a CPA firm that produces a wrong number is a
@@ -3172,8 +3182,8 @@ timeframes.
    more serious of the two.
 
 **One deliberate departure from his reference, not yet ruled on.** The reference puts the heading top
-left; every other section on his site uses a centred heading with a small gold eyebrow above it. The
-mockup follows **his site's centred convention**, borrowing only the reference's two-tone heading and
+left; every other section on the firm's site uses a centred heading with a small gold eyebrow above it. The
+mockup follows **the site's own centred convention**, borrowing only the reference's two-tone heading and
 short gold rule, which his hero already uses. **He has not said which he prefers.** Switching to left
 aligned is a few lines if he wants the reference exactly.
 
@@ -3393,7 +3403,7 @@ build** — it is approved onto the list.
 > browser pane does not composite, which throttles the scroll animations needed to fire them. Treat
 > counting as his observation, not as established fact.
 >
-> **What his site has today, measured.** **Zero CSS keyframes.** One scroll effect — `.reveal`,
+> **What the firm's site has today, measured.** **Zero CSS keyframes.** One scroll effect — `.reveal`,
 > `opacity 0→1` plus `translateY(18px→0)` over 0.6s, fired by an IntersectionObserver at threshold
 > 0.1 — applied **identically to all 22 blocks**. Plus 14 hover rules and 11 transition rules:
 > `.btn` lift, `.card` lift with border and shadow, `.card .ci` icon fill, `.photo img` 1.045 scale

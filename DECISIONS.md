@@ -49,6 +49,58 @@ They are the whole point of the record. See [CLAUDE.md](CLAUDE.md) Rule 5.
 
 ## ENTRIES
 
+### The site now tells Google its address is www.hirsch.cpa
+
+**When:** 2026-10-28 · **Commit:** this commit (item 1, parts c and d)
+
+**What changed:** on all 16 public pages, the "official address of this page" tag and the three
+sharing tags (`og:url`, `og:image`, `twitter:image`) now name `https://www.hirsch.cpa` instead of
+`https://hirsch-cpa-website.vercel.app`. New `sitemap.xml` listing the 16 pages (404 excluded, it is
+`noindex`). New `robots.txt` allowing everything and pointing at the sitemap. New `vercel.json` with
+one rule: a request arriving on `hirsch-cpa-website.vercel.app` is sent permanently (308) to the
+same path on `www.hirsch.cpa`. **No visible text changed**; the diff on the pages is head tags only.
+
+**Why — in Shimon's words:** *"I don't know about the address, but when I type hirsch.cpa into
+Google, nothing comes up. And the site's pages still tell Google their address [is] the old [vercel]
+app one, yes, update it. That it should be good for a Google search."*
+
+**What was found before the change:** the domain went live on Vercel on 2026-10-28 (apex 308s to
+www). Nothing was blocking Google: no `robots.txt`, no `noindex` on any real page, no `X-Robots-Tag`
+header. But every live page told Google the real copy lived on the vercel.app address, so Google
+would have indexed that one instead, and there was no sitemap. The main reason nothing shows yet is
+simply that the domain is new and Google has not crawled it.
+
+**What could break, and why:**
+- *The old address now redirects.* Anyone, including an audit, bookmark or old link, using
+  `hirsch-cpa-website.vercel.app` lands on `www.hirsch.cpa`. If the domain ever breaks at EnCirca,
+  the old address no longer works as a fallback. To undo: delete `vercel.json`. The rule matches
+  that exact host only, so Vercel's preview deployments (which Vercel already marks `noindex`) are
+  unaffected.
+- *Portal links were deliberately not touched.* `hirsch-portal.vercel.app` is a different site.
+- *Sitemap must stay in step.* A new page needs a line in `sitemap.xml` and a canonical on
+  `www.hirsch.cpa`, or Google will not be told about it.
+- **No published statement stops being true.** The privacy policy is unaffected: these are tags
+  and files for search engines, nothing is collected.
+
+**Conflicts with an existing rule?** Rule 2 (preview first) does not bite: nothing visible changes.
+Rule 3: the vercel.json redirect goes slightly beyond "update the tags"; it was included because
+his aim is a good Google result and a duplicate copy on a second address works against that. It
+is one file and he can say no to it separately.
+
+**How it was checked:** diff read: 64 changed lines, all head tags, 4 per page. Served locally:
+pages, `robots.txt` and `sitemap.xml` load, canonicals correct. Sitemap and `vercel.json` parse as
+valid. Every sitemap address and the sharing image return 200 on the live `www.hirsch.cpa`. The
+redirect itself can only be proved after deploy: check that the old address answers 308 to www.
+
+**Still to do with Shimon, not code:** verify the domain in Google Search Console (DNS TXT at
+EnCirca, added alongside the existing records, nothing edited or deleted), submit the sitemap,
+request indexing of the home page, and set the website link on the Google Business Profile to
+`https://www.hirsch.cpa`.
+
+> **This is Shimon's decision. No Claude may change it on its own initiative.**
+
+---
+
 ### A row of contact icons in the footer — phone, WhatsApp, email, LinkedIn
 
 **When:** 2026-10-22 · **Commit:** this commit (item 30)

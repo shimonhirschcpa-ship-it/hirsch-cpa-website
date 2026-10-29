@@ -1,0 +1,10 @@
+{
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "hirsch-cpa-website.vercel.app" }],
+      "destination": "https://www.hirsch.cpa/:path*",
+      "permanent": true
+    }
+  ]
+}
