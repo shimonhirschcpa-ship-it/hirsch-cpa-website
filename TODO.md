@@ -793,6 +793,11 @@ Four small gold icons sit under the firm name in the footer on all 17 pages: **c
 
 ### 31. Get the site into Google: Search Console and the Business Profile link
 
+**🟡 IN PROGRESS, 2026-10-29.** Shimon asked for this to be done for him end to end, and approved
+it. The proof-of-ownership tag Google asked for is now on the home page and live. Verification uses
+that tag, so **no EnCirca change is needed** for step 1. Still to do: confirm Google accepts it, send
+the page list, ask Google to visit the home page, and the Business Profile link.
+
 **Added:** 2026-10-28 · follows item 1. In his words: *"when I type hirsch.cpa into Google,
 nothing comes up."* The site is now ready for Google. What's left is telling Google about it,
 **done together with Shimon**:

@@ -49,6 +49,38 @@ They are the whole point of the record. See [CLAUDE.md](CLAUDE.md) Rule 5.
 
 ## ENTRIES
 
+### Google Search Console verification tag on the home page
+
+**When:** 2026-10-29 · **Commit:** this commit (item 31)
+
+**What changed:** one invisible line in the `<head>` of `index.html` only:
+`<meta name="google-site-verification" content="3OcUqeMKEXJN-1CiuM_FGtL2QWv6-om2ft8-eGul8mo">`.
+It proves to Google that whoever controls the site owns the Search Console property. Nothing a
+visitor sees changes, so no preview was needed.
+
+**Why:** Shimon asked for Google Search Console to be done for him end to end, and approved it. This
+follows his words recorded under the 2026-10-28 address entry: *"when I type hirsch.cpa into Google,
+nothing comes up."*
+
+**What could break, and why:** nothing on the page. **Do not remove this tag**: Google re-checks it,
+and if it disappears the Search Console property loses its verified status and the reports and
+indexing requests stop working. Home page only, because Google only reads it there; putting it on
+all 16 pages would add nothing. This is the HTML tag method, which suits a URL-prefix property
+(`https://www.hirsch.cpa/`). It replaces the DNS TXT plan in item 31 for now, so **no EnCirca edit
+was needed**. If a Domain property is ever wanted (covering every subdomain), that still needs the
+TXT record, added alongside the existing ones.
+
+**Conflicts with an existing rule?** None. Rule 2 does not apply, as nothing visible changed. The
+privacy policy stays true: the tag sends nothing and sets no cookie, and Search Console adds no
+tracking to the site.
+
+**How it was checked:** diff is one added line. Confirmed present in the live page source of
+`https://www.hirsch.cpa/` after deploy.
+
+> **This is Shimon's decision. No Claude may change it on its own initiative.**
+
+---
+
 ### The site no longer claims AICPA or NYSSCPA membership
 
 **When:** 2026-10-28 · **Commits:** `bf0e822` (text and sharing picture) and this commit (logo files)
