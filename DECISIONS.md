@@ -92,6 +92,13 @@ pages, `robots.txt` and `sitemap.xml` load, canonicals correct. Sitemap and `ver
 valid. Every sitemap address and the sharing image return 200 on the live `www.hirsch.cpa`. The
 redirect itself can only be proved after deploy: check that the old address answers 308 to www.
 
+**After going live (same day):** the first redirect rule (`/:path*`) moved every page on the old
+address except the bare home page `/`, which still served the site. The rule was changed to
+`/(.*)` in `b585975`, and the old home page then returned 308 to www. Shimon had already approved
+the redirect; this made it do what was approved. Verified live: old address home, a page and
+robots.txt all 308 to the same path on www; hirsch.cpa 308 to www; www, sitemap and robots 200;
+canonicals on www.hirsch.cpa; a missing page still gives the site's own 404.
+
 **Still to do with Shimon, not code:** verify the domain in Google Search Console (DNS TXT at
 EnCirca, added alongside the existing records, nothing edited or deleted), submit the sitemap,
 request indexing of the home page, and set the website link on the Google Business Profile to

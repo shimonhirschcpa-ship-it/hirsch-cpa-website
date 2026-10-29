@@ -118,10 +118,11 @@ entry lists them.
 
 ### 1. Anyone who types hirsch.cpa gets a browser security warning
 
-**2026-10-28: the domain is live (www.hirsch.cpa, apex redirects to it).** Parts (c) and (d) below,
-the address tags plus robots and sitemap, are built locally and waiting for his go to push; see the
-DECISIONS entry of the same date. After that: Google Search Console and the Business Profile link,
-with him.
+**✅ DONE — LIVE 2026-10-28, commits `561206d` and `b585975`.** The domain is connected:
+www.hirsch.cpa loads with a valid padlock and hirsch.cpa redirects to it. Every page now tells Google
+its address is www.hirsch.cpa, the site has a page list and robots file for Google, and the old
+Vercel address redirects every page to the same page on www.hirsch.cpa. All checked on the live
+site. The Google Search Console and Business Profile steps that follow are item 31.
 
 **🔗 2026-10-28: a second EnCirca job is waiting, do both in one sitting with Shimon.** The portal's
 to-do item 53, *"Sign-in codes reach Microsoft mailboxes late: give the portal its own Brevo sending
@@ -787,6 +788,30 @@ Four small gold icons sit under the firm name in the footer on all 17 pages: **c
 > **Checked:** all 17 pages carry exactly one row with the four correct links, labels and new-tab behaviour. **Removing the new row from each page restores the original file byte for byte**, so nothing else in the footer moved. The year-by-year tables on all three calculators are intact, the three calculator views still switch, no console errors, and no sideways scroll at phone width.
 
 **Added:** 2026-10-22 · *requested by Shimon*
+
+---
+
+### 31. Get the site into Google: Search Console and the Business Profile link
+
+**Added:** 2026-10-28 · follows item 1. In his words: *"when I type hirsch.cpa into Google,
+nothing comes up."* The site is now ready for Google. What's left is telling Google about it,
+**done together with Shimon**:
+
+1. **Google Search Console:** add the domain, then add the one verification line Google gives at
+   EnCirca **as a new line, alongside the existing ones. Edit nothing, delete nothing** (the mail
+   records live there; see item 1).
+2. Send Google the page list (`https://www.hirsch.cpa/sitemap.xml`) and ask it to visit the home page.
+3. **Google Business Profile:** set the website link to `https://www.hirsch.cpa`.
+
+Expect days to a couple of weeks before the site shows in searches.
+
+> **📎 CONTEXT FOR CLAUDE** — Use a **Domain** property (`hirsch.cpa`), not a URL-prefix one, so
+> apex, www and both protocols are covered; it requires DNS TXT verification. The TXT goes on `@`,
+> where the SPF and Microsoft verification TXT records already sit: **add a separate record, do not
+> append to or replace either.** Read the MX and TXT lines before and after and confirm they are
+> unchanged (same discipline as item 1). Do it in the same EnCirca sitting as portal item 53 if that
+> is still open. Verified 2026-10-28: robots.txt allows all, no noindex on any real page, no
+> X-Robots-Tag header, sitemap lists 16 URLs, all 200, matching each page's canonical.
 
 ---
 
@@ -3856,6 +3881,14 @@ the questions, do not duplicate it back into this section.**
 
 Finished work, newest first. **Items stay in their original section above as well**, so the
 📎 context blocks behind them remain where a future Claude will look. This is the index.
+
+### Shipped 2026-10-28
+
+**Commits `561206d` and `b585975`: the site lives at www.hirsch.cpa and tells Google so.** Address
+tags on all 16 pages, a page list and robots file, and the old Vercel address redirecting to the
+new one. Checked on the live site.
+
+- **1.** Anyone who types hirsch.cpa gets a browser security warning
 
 ### Shipped 2026-09-24
 
