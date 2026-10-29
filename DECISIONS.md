@@ -49,6 +49,47 @@ They are the whole point of the record. See [CLAUDE.md](CLAUDE.md) Rule 5.
 
 ## ENTRIES
 
+### Clean addresses: hirsch.cpa/ for home, no ".html", no "#top"
+
+**When:** 2026-10-29 · **Commits:** `b6aa984` (the change) and this commit (record)
+
+**What changed:** every internal link on all 17 pages now uses a root address without `.html`
+(`/`, `/contact`, `/services/audit`, `/#about`). The logo goes to `/`; on the home page itself it
+scrolls to the top and clears any `#…` from the address instead of adding `#top`. Canonical,
+`og:url` and `sitemap.xml` use the clean addresses. `vercel.json` gains `"cleanUrls": true`, so
+every old `.html` address 308-redirects to its clean form, plus an explicit `/index` → `/`
+redirect. The vercel.app redirect from 2026-10-28 is unchanged. The `<a id="top">` anchor stays,
+so any old `#top` link still lands correctly.
+
+**Why — in Shimon's words:** he saw *"hirsch.cpa/index.html#top"* in the address bar and asked why.
+Cause: the logo on every page linked to `index.html#top`. On the plan to fix it: *"yes."*
+
+**What could break, and why:**
+- *Old links and bookmarks.* Covered by the 308 redirects; verified live.
+- *Google.* It had just been sent the `.html` sitemap. The new sitemap and canonicals agree on the
+  clean addresses and the old ones redirect, which is the standard signal; Google re-crawls on its own.
+- *The logo click handler* must call `window.scrollTo`, not bare `scrollTo`: inside an inline
+  `onclick`, a bare name resolves to the link element first, and `Element.scrollTo` scrolls the
+  link, not the page. That bug was caught in testing. **Do not "simplify" it back.**
+- *A new page* must be linked as `/name`, never `name.html`, and added to the sitemap without
+  `.html`.
+- Section links (`/#about`, `/#services`) still put the section in the address. That is deliberate:
+  they need it to jump to the section.
+- **No published statement changes.** No visible text changed (proved by comparing every page with
+  links set aside).
+
+**Conflicts with an existing rule?** None. Rule 2 (preview) does not apply: nothing visible changes
+apart from the address bar, which is the point of the change.
+
+**How it was checked:** locally, every internal link target returned 200, old `.html` addresses
+redirected, inner-page styles and images loaded, and a scripted browser clicked the logo: home
+returned to the top with a clean address, and from a service page it went to `/`. After deploy,
+verified on the live site (see the report).
+
+> **This is Shimon's decision. No Claude may change it on its own initiative.**
+
+---
+
 ### Google Search Console verification tag on the home page
 
 **When:** 2026-10-29 · **Commit:** this commit (item 31)
