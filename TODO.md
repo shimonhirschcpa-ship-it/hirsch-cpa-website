@@ -126,8 +126,8 @@ site. The Google Search Console and Business Profile steps that follow are item 
 
 **🔗 2026-10-28: a second EnCirca job is waiting, do both in one sitting with Shimon.** The portal's
 to-do item 53, *"Sign-in codes reach Microsoft mailboxes late: give the portal its own Brevo sending
-domain"* (`hirsch-portal/docs/TODO.md`), adds records for a new subdomain such as
-`portal.hirsch.cpa`. It must not touch the existing `hirsch.cpa` mail records, and neither must this one.
+domain"* (`hirsch-portal/docs/TODO.md`), adds records for the subdomain
+`mail.hirsch.cpa`; item 55 there adds one CNAME for `portal.hirsch.cpa`. It must not touch the existing `hirsch.cpa` mail records, and neither must this one.
 
 **Added:** 2026-08-26 · **Updated 2026-08-26** — Shimon asked for this directly, and the design
 audit the same day found the situation is worse than the domain simply not being connected ·
