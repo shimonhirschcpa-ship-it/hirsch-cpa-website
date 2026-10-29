@@ -3884,6 +3884,15 @@ Finished work, newest first. **Items stay in their original section above as wel
 
 ### Shipped 2026-10-28
 
+**Commits `bf0e822` and `0aa4c98`: the site stops claiming AICPA and NYSSCPA membership.** In his
+words: *"we're not members, so don't write members."* The hero line now reads "Certified Public
+Accountants", the About line "Licensed Certified Public Accountants based in New York", the sharing
+picture lost its "AICPA • NYSSCPA" line, and the two logo files are deleted. Verified live: both
+lines, the sharing picture identical to the approved one, both logo addresses 404, no membership
+wording on any page checked.
+
+- **Unnumbered.** Remove every claim of AICPA or NYSSCPA membership
+
 **Commit `028dcc8`: the badge ribbon comes off the home page.** In his words: *"Take off those three
 badges and remove that whole ribbon."* Approved from before and after screenshots, verified on the
 live site. Requested and shipped the same day, so it never had an open item.
