@@ -49,6 +49,42 @@ They are the whole point of the record. See [CLAUDE.md](CLAUDE.md) Rule 5.
 
 ## ENTRIES
 
+### Home page: the badge ribbon is removed
+
+**When:** 2026-10-28 · **Commit:** this commit
+
+**What changed:** the white strip under the home page's opening section, holding three badges
+(the round CPA seal, the AICPA logo, the NYSSCPA logo, each with a caption), is deleted from
+`index.html`. It existed on the home page only. Nothing else on the page changed: the hero now
+leads straight into "What we do" with the site's ordinary section spacing.
+
+**Why — in Shimon's words:** *"Take off the three badges we added (AICPA, CPA, New York, whatever).
+Take off those three badges and remove that whole ribbon."* On seeing the before and after
+screenshots: *"What you did now is perfect, push it."*
+
+**Was a preview approved?** Yes. Before and after screenshots at computer and phone width, cropped to
+the area, approved in the words above.
+
+**What could break, and why:** only the home page carried the ribbon, so no other page is touched.
+The ribbon's styles (`.trust`, `.seal` and its children in `assets/site.css`) and the two logo
+files (`assets/aicpa.png`, `assets/nysscpa.png`) were **deliberately left in place**: deleting them
+was not asked for (Rule 3), they cost nothing, and leaving them makes this a one-file change that
+reverts cleanly. A future tidy-up may remove them; nothing else uses them. **Published statements:**
+the two text lines saying the firm's people are licensed CPAs and members of the AICPA and NYSSCPA
+(under the hero buttons, and in About) remain; their removal is a separate question put to him the
+same day, not part of this change.
+
+**Conflicts with an existing rule?** None. Item 6 on the to-do list (closed, "leave it") concerned the
+contrast of the CPA badge among other things; removing the badge does not reopen that decision.
+
+**How it was checked:** the diff is five deleted lines, the ribbon block only. Rendered at 1440px and
+at a true 390px phone width before and after; the layout closes up with no leftover band. Verified on
+the live site after deploy.
+
+> **This is Shimon's decision. No Claude may change it on its own initiative.**
+
+---
+
 ### The site now tells Google its address is www.hirsch.cpa
 
 **When:** 2026-10-28 · **Commit:** this commit (item 1, parts c and d)
