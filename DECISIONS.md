@@ -49,6 +49,54 @@ They are the whole point of the record. See [CLAUDE.md](CLAUDE.md) Rule 5.
 
 ## ENTRIES
 
+### The site no longer claims AICPA or NYSSCPA membership
+
+**When:** 2026-10-28 · **Commits:** `bf0e822` (text and sharing picture) and this commit (logo files)
+
+**What changed:**
+- Home page, the line under the hero buttons: "Licensed CPAs · Members of the AICPA & NYSSCPA"
+  became **"Certified Public Accountants"** (kept in the same bold style).
+- Home page, About section: the line became **"Licensed Certified Public Accountants based in
+  New York"**.
+- `assets/og-image.png`, the picture shown when any page is shared: the line "New York • AICPA •
+  NYSSCPA" under "hirsch.cpa" is gone. There was no source file, so the image was edited directly:
+  that strip was replaced by a clean copy of the card's own border and background from further
+  along the same rows. Nothing else in the image moved.
+- `assets/aicpa.png` and `assets/nysscpa.png` deleted. Nothing referenced them after the ribbon
+  removal, but they were still reachable by direct address.
+
+**Why — in Shimon's words:** *"we're not members, so don't write members."* He asked for the two
+lines to be replaced with the wording above and for the whole site to be searched so membership is
+not claimed anywhere. On the before and after screenshots: *"perfect, push."* On the logo files: he
+asked for them to be deleted.
+
+**Was a preview approved?** Yes, before and after screenshots at computer and phone width of both
+lines and of the sharing picture.
+
+**What could break, and why:** the sharing picture is used by all 16 pages, so every shared link
+shows the new version. Apps that already cached the old one (LinkedIn, WhatsApp and similar) may show
+it until they refresh. The `.trust` and `.seal` styles in `assets/site.css` remain unused; harmless.
+**This change made a published statement true rather than untrue (Rule 7):** the site said the firm
+belonged to two bodies it does not belong to.
+
+**The full search, so nobody repeats it blind.** Every page, meta tag, alt text, footer and the
+sharing picture were checked for "member", "AICPA", "NYSSCPA", "New York State Society" and
+"Institute of". Hits: the two home page lines and the sharing picture, all fixed. One more on the
+Terms page, *"Hirsch CPA and its members will not be liable…"*, was **left deliberately**: "members"
+there means the owners of the LLC, not a professional body. No structured data exists on the site.
+**Do not reintroduce any AICPA or NYSSCPA membership wording, logo or badge unless Shimon says the
+firm has joined.**
+
+**Conflicts with an existing rule?** None. Item 6 (closed, contrast of the credential lines, "leave
+it") is about colour, not wording; the colours were not touched.
+
+**How it was checked:** diff read: two lines in `index.html`, one image, two deleted files. Searched
+again after the edit: no membership claim left. Verified on the live site after deploy.
+
+> **This is Shimon's decision. No Claude may change it on its own initiative.**
+
+---
+
 ### Home page: the badge ribbon is removed
 
 **When:** 2026-10-28 · **Commit:** this commit
