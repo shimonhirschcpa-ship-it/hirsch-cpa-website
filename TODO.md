@@ -3884,6 +3884,12 @@ Finished work, newest first. **Items stay in their original section above as wel
 
 ### Shipped 2026-10-28
 
+**Commit `028dcc8`: the badge ribbon comes off the home page.** In his words: *"Take off those three
+badges and remove that whole ribbon."* Approved from before and after screenshots, verified on the
+live site. Requested and shipped the same day, so it never had an open item.
+
+- **Unnumbered.** Remove the three badges (CPA, AICPA, NYSSCPA) and their ribbon
+
 **Commits `561206d` and `b585975`: the site lives at www.hirsch.cpa and tells Google so.** Address
 tags on all 16 pages, a page list and robots file, and the old Vercel address redirecting to the
 new one. Checked on the live site.
