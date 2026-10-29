@@ -798,6 +798,12 @@ it. The proof-of-ownership tag Google asked for is now on the home page and live
 that tag, so **no EnCirca change is needed** for step 1. Still to do: confirm Google accepts it, send
 the page list, ask Google to visit the home page, and the Business Profile link.
 
+**📌 FOR THE SATURDAY CHECK (added 2026-10-29).** The site moved to clean addresses the same day
+(no ".html"; see the DECISIONS entry). **Resubmit `https://www.hirsch.cpa/sitemap.xml` in Search
+Console** so Google reads the new list now rather than on its next pass. It could not be done from
+here without opening a browser tab in his account. Old ".html" addresses redirect, so nothing
+breaks in the meantime.
+
 **Added:** 2026-10-28 · follows item 1. In his words: *"when I type hirsch.cpa into Google,
 nothing comes up."* The site is now ready for Google. What's left is telling Google about it,
 **done together with Shimon**:
@@ -3886,6 +3892,15 @@ the questions, do not duplicate it back into this section.**
 
 Finished work, newest first. **Items stay in their original section above as well**, so the
 📎 context blocks behind them remain where a future Claude will look. This is the index.
+
+### Shipped 2026-10-29
+
+**Commit `b6aa984`: clean addresses.** He saw *"hirsch.cpa/index.html#top"* in the address bar and
+said *"yes"* to the fix. Home is hirsch.cpa/, other pages have no ".html", the logo adds no "#top",
+old addresses redirect, and the sitemap and address tags match. Verified on the live site, including
+a real click on the logo.
+
+- **Unnumbered.** Remove "index.html#top" and ".html" from the site's addresses
 
 ### Shipped 2026-10-28
 
